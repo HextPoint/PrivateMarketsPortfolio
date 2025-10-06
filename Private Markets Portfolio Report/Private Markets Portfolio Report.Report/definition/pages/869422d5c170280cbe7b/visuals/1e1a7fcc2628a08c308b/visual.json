@@ -1,0 +1,312 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "1e1a7fcc2628a08c308b",
+  "position": {
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "height": 650.3038224886028,
+    "width": 1220.5166788875781
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Dates"
+                    }
+                  },
+                  "Property": "Date"
+                }
+              },
+              "queryRef": "Dates.Date",
+              "nativeQueryRef": "Date"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Portfolios"
+                    }
+                  },
+                  "Property": "Portfolio"
+                }
+              },
+              "queryRef": "Portfolios.Portfolio",
+              "nativeQueryRef": "Portfolio"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investments"
+                    }
+                  },
+                  "Property": "Investment (legal name)"
+                }
+              },
+              "queryRef": "Investments.Investment (legal name)",
+              "nativeQueryRef": "Investment (legal name)"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Transaction Types"
+                    }
+                  },
+                  "Property": "Transaction Type"
+                }
+              },
+              "queryRef": "Transaction Types.Transaction Type",
+              "nativeQueryRef": "Transaction Type"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Transactions"
+                    }
+                  },
+                  "Property": "Is Close Transaction"
+                }
+              },
+              "queryRef": "Transactions.Is Close Transaction",
+              "nativeQueryRef": "Is Close Transaction"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Transactions"
+                    }
+                  },
+                  "Property": "Transaction Amount"
+                }
+              },
+              "queryRef": "Transactions.Transaction Amount",
+              "nativeQueryRef": "Transaction Amount"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Transactions"
+                    }
+                  },
+                  "Property": "Prior Contribution"
+                }
+              },
+              "queryRef": "Transactions.Prior Contribution",
+              "nativeQueryRef": "Prior Contribution"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Transactions"
+                    }
+                  },
+                  "Property": "Recallable Amount"
+                }
+              },
+              "queryRef": "Transactions.Recallable Amount",
+              "nativeQueryRef": "Recallable Amount"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Transactions"
+                    }
+                  },
+                  "Property": "Transaction Cash Flow"
+                }
+              },
+              "queryRef": "Transactions.Transaction Cash Flow",
+              "nativeQueryRef": "Transaction Cash Flow"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Dates"
+                  }
+                },
+                "Property": "Date"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "general": [
+        {
+          "properties": {}
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "286.52603891348963D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Investments.Investment (legal name)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "141.81469203181388D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Portfolios.Portfolio"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "197.17488694006792D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Transaction Types.Transaction Type"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "69.90549842694674D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Transactions.Is Close Transaction"
+          }
+        }
+      ],
+      "values": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "9D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "5D"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualTooltip": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "section": {
+              "expr": {
+                "Literal": {
+                  "Value": "'96dad30308402077a603'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "ecc997f1dc89620173dc"
+}

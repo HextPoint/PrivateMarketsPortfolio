@@ -1,0 +1,42 @@
+table Portfolios
+	lineageTag: 6edd92ec-e33c-4b54-8e77-d201b3261ba9
+
+	/// The portfolio that holds the investment. This could be a legal entity or another logical container.
+	column Portfolio
+		dataType: string
+		lineageTag: 3e1d6632-9f05-49b8-9c4e-96566e5c5593
+		summarizeBy: none
+		sourceColumn: Portfolio
+
+		annotation SummarizationSetBy = Automatic
+
+	column PortfolioKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 73d429e9-d720-477a-917a-b097ecc1b899
+		summarizeBy: none
+		sourceColumn: PortfolioKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Portfolios = m
+		mode: import
+		queryGroup: 'Model tables'
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents(ExcelFileURL), null, true),
+				    Portfolios_Table = Source{[Item="Portfolios",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Portfolios_Table,{{"Portfolio", type text}}),
+				    #"Added Index" = Table.AddIndexColumn(#"Changed Type", "Index", 1, 1, Int64.Type),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Added Index",{"Index", "Portfolio"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Reordered Columns",{{"Index", "PortfolioKey"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

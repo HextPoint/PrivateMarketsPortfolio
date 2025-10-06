@@ -1,0 +1,50 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "3feb46bfb91add461a99",
+  "position": {
+    "x": 454.23176216532175,
+    "y": 18.621507087304551,
+    "z": 10750,
+    "height": 406.34788679796719,
+    "width": 410.33820974524673,
+    "tabOrder": 12000
+  },
+  "visual": {
+    "visualType": "image",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "imageUrl": {
+              "expr": {
+                "ResourcePackageItem": {
+                  "PackageName": "RegisteredResources",
+                  "PackageType": 1,
+                  "ItemName": "IRR_chart_filter_cross-highlig10674077938565785.png"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Cross-highlight image'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "5f364e109d6707531559",
+  "howCreated": "InsertVisualButton"
+}

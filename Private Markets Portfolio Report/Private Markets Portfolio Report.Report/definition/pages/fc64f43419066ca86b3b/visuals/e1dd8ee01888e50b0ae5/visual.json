@@ -1,0 +1,358 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "e1dd8ee01888e50b0ae5",
+  "position": {
+    "x": 820.237161153155,
+    "y": 330.19957338973256,
+    "z": 3000,
+    "height": 320,
+    "width": 400.87912087912088,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "stackedAreaChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "HierarchyLevel": {
+                  "Expression": {
+                    "Hierarchy": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dates"
+                        }
+                      },
+                      "Hierarchy": "Date Hierarchy"
+                    }
+                  },
+                  "Level": "Year"
+                }
+              },
+              "queryRef": "Dates.Date Hierarchy.Year",
+              "nativeQueryRef": "Date Hierarchy Year",
+              "active": true
+            },
+            {
+              "field": {
+                "HierarchyLevel": {
+                  "Expression": {
+                    "Hierarchy": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dates"
+                        }
+                      },
+                      "Hierarchy": "Date Hierarchy"
+                    }
+                  },
+                  "Level": "Quarter"
+                }
+              },
+              "queryRef": "Dates.Date Hierarchy.Quarter",
+              "nativeQueryRef": "Date Hierarchy Quarter",
+              "active": true
+            },
+            {
+              "field": {
+                "HierarchyLevel": {
+                  "Expression": {
+                    "Hierarchy": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dates"
+                        }
+                      },
+                      "Hierarchy": "Date Hierarchy"
+                    }
+                  },
+                  "Level": "Month"
+                }
+              },
+              "queryRef": "Dates.Date Hierarchy.Month",
+              "nativeQueryRef": "Date Hierarchy Month",
+              "active": true
+            },
+            {
+              "field": {
+                "HierarchyLevel": {
+                  "Expression": {
+                    "Hierarchy": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dates"
+                        }
+                      },
+                      "Hierarchy": "Date Hierarchy"
+                    }
+                  },
+                  "Level": "Date"
+                }
+              },
+              "queryRef": "Dates.Date Hierarchy.Date",
+              "nativeQueryRef": "Date Hierarchy Date",
+              "active": false
+            }
+          ]
+        },
+        "Tooltips": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Cumulative Price P&L"
+                }
+              },
+              "queryRef": "Investment Metrics.Cumulative Price P&L",
+              "nativeQueryRef": "Cumulative Price P&L"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Cumulative FX P&L"
+                }
+              },
+              "queryRef": "Investment Metrics.Cumulative FX P&L",
+              "nativeQueryRef": "Cumulative FX P&L"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Cumulative Cross P&L"
+                }
+              },
+              "queryRef": "Investment Metrics.Cumulative Cross P&L",
+              "nativeQueryRef": "Cumulative Cross P&L"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Total P&L"
+                }
+              },
+              "queryRef": "Investment Metrics.Total P&L",
+              "nativeQueryRef": "Total P&L"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Price P&L"
+                }
+              },
+              "queryRef": "Investment Metrics.Price P&L",
+              "nativeQueryRef": "Price P&L"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "FX P&L"
+                }
+              },
+              "queryRef": "Investment Metrics.FX P&L",
+              "nativeQueryRef": "FX P&L"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Cross P&L"
+                }
+              },
+              "queryRef": "Investment Metrics.Cross P&L",
+              "nativeQueryRef": "Cross P&L"
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Cumulative Total P&L"
+                }
+              },
+              "queryRef": "Investment Metrics.Cumulative Total P&L",
+              "nativeQueryRef": "Cumulative Total P&L"
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "legend": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "position": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Top'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "labels": [
+        {
+          "properties": {}
+        }
+      ],
+      "categoryAxis": [
+        {
+          "properties": {
+            "titleFontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "11D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "valueAxis": [
+        {
+          "properties": {
+            "titleFontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "11D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "lineStyles": [
+        {
+          "properties": {
+            "areaShow": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "5D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "dropShadow": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "title": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'P&L by Date'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "0d45617f176adc408c07"
+}

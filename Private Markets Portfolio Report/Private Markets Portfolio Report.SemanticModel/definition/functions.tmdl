@@ -1,0 +1,165 @@
+function 'HextPoint.PowerBI.InceptionToDate' = ```
+		(MeasureToITD : expr) =>
+			
+		VAR MaxDate = MAX('Dates'[Date])
+		
+		VAR Result = CALCULATE(
+		    MeasureToITD,
+		    FILTER(
+		        ALL('Dates'),
+		        'Dates'[Date] <= MaxDate
+		    )
+		)
+		
+		RETURN Result
+		```
+	lineageTag: f4c02ed5-1133-4f5d-a9df-4306c2569749
+
+function 'HextPoint.PowerBI.InvestmentCurrencyMeasure' = ```
+		( MeasureToLocal : expr) =>
+			
+		VAR Calc = CALCULATE(
+		    MeasureToLocal,
+			REMOVEFILTERS('Reporting Currencies'),
+		    'Investment Metrics'[isLocalCurrency] = TRUE
+		)
+		
+		VAR Result = IF(HASONEVALUE('Investment Metrics'[InvestmentCurrencyKey]),Calc,BLANK())
+		
+		RETURN Result
+		```
+	lineageTag: 8d5c4f19-cfaf-4909-9d27-b0e02b857ec3
+
+function 'HextPoint.PowerBI.CumulativeToDate' = ```
+		(MeasureToCumulative : expr) =>
+			
+		VAR MaxDate = MAX('Dates'[Date])
+		VAR MinDateSelected = 
+		    CALCULATE(
+		        MIN('Dates'[Date]),
+		        ALLSELECTED('Dates')
+		    )
+		
+		VAR Result =
+		    CALCULATE(
+		        MeasureToCumulative,
+		        DATESBETWEEN('Dates'[Date],MinDateSelected,MaxDate)
+		    )
+		
+		RETURN Result
+		```
+	lineageTag: 632d67ea-b4c4-4c9e-93dd-870f6f6b7589
+
+function 'HextPoint.PowerBI.ClosingValue' = ```
+		(ClosingExpr : expr) =>
+			
+		VAR MaxDateInFilter = MAX('Dates'[Date])
+		VAR MaxDate = TREATAS({MaxDateInFilter}, 'Dates'[Date])
+		
+		VAR Calc = CALCULATE(
+		    ClosingExpr,
+		    MaxDate
+		)
+		
+		VAR CheckDateWindow = NOT(ISEMPTY('Investment Metrics'))
+		
+		VAR Result = IF(ISBLANK(Calc),IF(CheckDateWindow,0,BLANK()),Calc)
+		
+		RETURN Result
+		```
+	lineageTag: 2959b50f-5de5-4bda-919a-cadd0348ecb3
+
+function 'HextPoint.PowerBI.HasOneReportingCurrency' = ```
+		( MeasureToCheck : expr) =>
+			
+		VAR Result = IF(HASONEVALUE('Reporting Currencies'[CurrencyKey]),MeasureToCheck,BLANK())
+		
+		RETURN Result
+		```
+	lineageTag: 6f8c4491-deb1-41c9-821a-d9c4af2357a8
+
+function 'HextPoint.PowerBI.OpeningValue' = ```
+		(OpeningExpr : expr) =>
+			
+		VAR MinDateInFilter = Min('Dates'[Date])
+		VAR MinDate = TREATAS({MinDateInFilter}, 'Dates'[Date])
+		
+		VAR Calc = CALCULATE(
+		    OpeningExpr,
+		    MinDate
+		)
+		
+		VAR CheckDateWindow = NOT(ISEMPTY('Investment Metrics'))
+		
+		VAR Result = IF(ISBLANK(Calc),IF(CheckDateWindow,0,BLANK()),Calc)
+		
+		RETURN Result
+		```
+	lineageTag: bd92efcc-2342-4b22-826f-42eea4634fab
+
+function 'HextPoint.PowerBI.ClosingValueBlankEmpty' = ```
+		(ClosingExpr : expr) =>
+			
+		VAR MaxDateInFilter = MAX('Dates'[Date])
+		VAR MaxDate = TREATAS({MaxDateInFilter}, 'Dates'[Date])
+		
+		VAR Calc = CALCULATE(
+		    ClosingExpr,
+		    MaxDate
+		)
+		
+		VAR Result = Calc
+		
+		RETURN Result
+		```
+	lineageTag: 67683ae6-069d-44d4-b818-0d2ae38c750c
+
+function 'HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat' = ```
+		() =>
+			
+		VAR InvestmentCurrencyKeyUnique = HASONEVALUE('Investment Metrics'[InvestmentCurrencyKey])
+		
+		VAR CurrentInvestmentCurrencyKey = IF(InvestmentCurrencyKeyUnique, FIRSTNONBLANK('Investment Metrics'[InvestmentCurrencyKey],'Investment Metrics'[InvestmentCurrencyKey]),BLANK())
+		
+		VAR Result = IF(InvestmentCurrencyKeyUnique,CALCULATE(
+		        FIRSTNONBLANK('Investment Currencies'[Currency format string],'Investment Currencies'[Currency format string]),
+		        'Investment Currencies'[CurrencyKey] = CurrentInvestmentCurrencyKey),"#,0;(#,0);#,0")
+		
+		RETURN Result
+		```
+	lineageTag: 69c00bc1-c9e5-431f-8077-b92c46bc112b
+
+function 'HextPoint.PowerBI.TransactionCurrencyFormat' = ```
+		() =>
+			
+		VAR InvestmentCurrencyKeyUnique = HASONEVALUE('Transactions'[CurrencyKey])
+		
+		VAR CurrentInvestmentCurrencyKey = IF(InvestmentCurrencyKeyUnique, FIRSTNONBLANK('Transactions'[CurrencyKey],'Transactions'[CurrencyKey]),BLANK())
+		
+		VAR Result = IF(InvestmentCurrencyKeyUnique,CALCULATE(
+		        FIRSTNONBLANK('Investment Currencies'[Transaction format string],'Investment Currencies'[Transaction format string]),
+		        'Investment Currencies'[CurrencyKey] = CurrentInvestmentCurrencyKey),"#,0.00;(#,0.00);#,0.00")
+		
+		RETURN Result
+		```
+	lineageTag: 34e9c7bb-3104-4f18-a0de-4724bf865f47
+
+function 'HextPoint.PowerBI.InvestmentCurrencyMeasureAllSelectedDatesCheck' = ```
+		( MeasureToLocal : expr) =>
+			
+		VAR Calc = CALCULATE(
+		    MeasureToLocal,
+			REMOVEFILTERS('Reporting Currencies'),
+		    'Investment Metrics'[isLocalCurrency] = TRUE
+		)
+		VAR CheckAllDateHasOneCurrency = CALCULATE(
+			HASONEVALUE('Investment Metrics'[InvestmentCurrencyKey]),
+			ALLSELECTED('Dates')
+		)
+		
+		VAR Result = IF(CheckAllDateHasOneCurrency,Calc,BLANK())
+		
+		RETURN Result
+		```
+	lineageTag: f6c9c862-ad3c-4aef-8346-0775e498cc4c
+

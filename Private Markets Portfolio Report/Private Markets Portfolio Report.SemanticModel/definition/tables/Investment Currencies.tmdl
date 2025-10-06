@@ -1,0 +1,100 @@
+table 'Investment Currencies'
+	lineageTag: 125e2d24-3dfc-4d74-b18c-3a38a9b56513
+
+	column CurrencyKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e5a6fe65-b3a6-421f-9cfc-63ad8a0bad12
+		summarizeBy: none
+		sourceColumn: CurrencyKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The investment's currency name.
+	column 'Investment Currency Name'
+		dataType: string
+		lineageTag: 3ec270a6-44cd-4bfe-a721-e1e819840efd
+		summarizeBy: none
+		sourceColumn: Investment Currency Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The investment's three letter ISO currency code.
+	column 'Investment CCY'
+		dataType: string
+		lineageTag: 3fde6e2b-5c0b-4de1-bc41-01d777f47e3d
+		summarizeBy: none
+		sourceColumn: Investment CCY
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Currency Symbol'
+		dataType: string
+		isHidden
+		lineageTag: 784b2351-0db6-4d31-b71d-297709c07b05
+		summarizeBy: none
+		sourceColumn: Currency Symbol
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Is Reporting Currency'
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: a22e42d4-8eb6-46cc-a010-38d4782ddd04
+		summarizeBy: none
+		sourceColumn: Is Reporting Currency
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The format string used for all investment metrics in the investment currency other than for transaction metrics.
+	column 'Currency format string'
+		dataType: string
+		lineageTag: 5ad66bc9-1172-4ce1-ac6c-47b09e6ec8fb
+		summarizeBy: none
+		sourceColumn: Currency format string
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsBaseCurrency
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: b22b52b6-0c7b-4d8b-9568-b457ac6614eb
+		summarizeBy: none
+		sourceColumn: IsBaseCurrency
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The format string used for transaction metrics.
+	column 'Transaction format string'
+		dataType: string
+		lineageTag: 04b31f7f-eefb-4971-9e47-fcb4805d1aff
+		summarizeBy: none
+		sourceColumn: Transaction format string
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Investment Currencies' = m
+		mode: import
+		queryGroup: 'Model tables'
+		source =
+				let
+				    Unfiltered_Currencies = Currencies,
+				    #"Renamed Columns" = Table.RenameColumns(Unfiltered_Currencies,{{"CCY", "Investment CCY"}, {"Currency Name", "Investment Currency Name"}, {"Reporting Currency", "Is Reporting Currency"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

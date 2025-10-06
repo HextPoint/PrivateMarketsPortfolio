@@ -1,0 +1,2295 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/bookmark/1.4.0/schema.json",
+  "displayName": "Show Slicer Page Info Pane",
+  "name": "2c14694f882ba43ed9aa",
+  "options": {
+    "applyOnlyToTargetVisuals": true,
+    "targetVisualNames": [
+      "017a8e10554503d94b00",
+      "c842cc4a781959896207",
+      "b15e5be2b566be74000e",
+      "c8e07bb404e68562b010",
+      "d252d30787e90d017648",
+      "010916256e0b8061bd85",
+      "44cca990d17a0c97c6ee",
+      "134e225071a74a235480",
+      "b75311629c61d5a109b8",
+      "669487f86e6ea11da238",
+      "169d778ad0a4095dd0a7",
+      "a2c22b4bbb120a062008"
+    ],
+    "suppressActiveSection": true,
+    "suppressData": true
+  },
+  "explorationState": {
+    "version": "1.3",
+    "activeSection": "1d900eed92a5c24ddb8a",
+    "filters": {
+      "byExpr": [
+        {
+          "name": "30459344bc78761080a0",
+          "type": "Categorical",
+          "expression": {
+            "Column": {
+              "Expression": {
+                "SourceRef": {
+                  "Entity": "Dates"
+                }
+              },
+              "Property": "Date"
+            }
+          },
+          "howCreated": 1
+        }
+      ]
+    },
+    "sections": {
+      "1d900eed92a5c24ddb8a": {
+        "visualContainers": {
+          "061f361221aba56e9318": {
+            "singleVisual": {
+              "visualType": "actionButton",
+              "objects": {}
+            }
+          },
+          "2992f7375e01000c7b84": {
+            "singleVisual": {
+              "visualType": "actionButton",
+              "objects": {}
+            }
+          },
+          "b1c813cb9a65c424b01b": {
+            "singleVisual": {
+              "visualType": "actionButton",
+              "objects": {}
+            }
+          },
+          "573d185e4574865b0596": {
+            "singleVisual": {
+              "visualType": "shape",
+              "objects": {}
+            }
+          },
+          "58832ca0d6794e005de8": {
+            "singleVisual": {
+              "visualType": "shape",
+              "objects": {}
+            }
+          },
+          "606a0a25b9d503773509": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "1965a5845025602b05ae",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investment Metrics"
+                        }
+                      },
+                      "Property": "Valuation"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "0dd2fcd60330c2656663",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investment Metrics"
+                        }
+                      },
+                      "Property": "IRR"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "eb06732da206213972e8",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investment Metrics"
+                        }
+                      },
+                      "Property": "TVPI Window"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "20bfe761e19ea8626459",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investment Metrics"
+                        }
+                      },
+                      "Property": "Total P&L"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "69fb9c9379092eee846c",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investment Metrics"
+                        }
+                      },
+                      "Property": "Open Investments"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "9f1f92ddd6ce56b05e70",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investment Metrics"
+                        }
+                      },
+                      "Property": "IRR ITD"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "730ec79d34c24645d98c",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investment Metrics"
+                        }
+                      },
+                      "Property": "TVPI"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "c3e91b816d050c21d506",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investment Metrics"
+                        }
+                      },
+                      "Property": "Total P&L ITD"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "cardVisual",
+              "objects": {},
+              "orderBy": [
+                {
+                  "Direction": 2,
+                  "Expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investment Metrics"
+                        }
+                      },
+                      "Property": "Valuation"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "8b2311ee3005e80b1a45": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "b1d3829744400e303720",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Reporting Currencies"
+                        }
+                      },
+                      "Property": "Reporting Currency"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "c24657d80154236d372e",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dates"
+                        }
+                      },
+                      "Property": "Min Date"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "6ca7ac5402deb476800d",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dates"
+                        }
+                      },
+                      "Property": "Max Date"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "cardVisual",
+              "objects": {},
+              "orderBy": [
+                {
+                  "Direction": 1,
+                  "Expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Reporting Currencies"
+                        }
+                      },
+                      "Property": "Reporting Currency"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "ad7af5fc877b2987b854": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "b64f78b0e0284c70d4a4": {
+            "singleVisual": {
+              "visualType": "actionButton",
+              "objects": {}
+            }
+          },
+          "be844432483c2b99b426": {
+            "filters": {
+              "byExpr": [
+                {
+                  "name": "89d46a3e8990934730e5",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Portfolios"
+                        }
+                      },
+                      "Property": "Portfolio"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "9e1c956768b31669aaac",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Strategies"
+                        }
+                      },
+                      "Property": "Strategy Group"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "6084622639a395867032",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Managers"
+                        }
+                      },
+                      "Property": "Manager"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "d4c428b60b50d65cd1b4",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investments"
+                        }
+                      },
+                      "Property": "Investment (legal name)"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "1d7a04de129a806a82cd",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investment Metrics"
+                        }
+                      },
+                      "Property": "Valuation"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "20a3707315ad7e09d71c",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investment Metrics"
+                        }
+                      },
+                      "Property": "Opening Valuation"
+                    }
+                  },
+                  "howCreated": 0
+                },
+                {
+                  "name": "22135e2de24b1584c825",
+                  "type": "Advanced",
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investment Metrics"
+                        }
+                      },
+                      "Property": "Cash Flow"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "pivotTable",
+              "objects": {},
+              "orderBy": [
+                {
+                  "Direction": 1,
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investments"
+                        }
+                      },
+                      "Property": "Investment (legal name)"
+                    }
+                  }
+                }
+              ],
+              "activeProjections": {
+                "Rows": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Portfolios"
+                        }
+                      },
+                      "Property": "Portfolio"
+                    }
+                  },
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Strategies"
+                        }
+                      },
+                      "Property": "Strategy Group"
+                    }
+                  },
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Managers"
+                        }
+                      },
+                      "Property": "Manager"
+                    }
+                  },
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investments"
+                        }
+                      },
+                      "Property": "Investment (legal name)"
+                    }
+                  }
+                ]
+              },
+              "expansionStates": [
+                {
+                  "roles": [
+                    "Rows"
+                  ],
+                  "levels": [
+                    {
+                      "queryRefs": [
+                        "Portfolios.Portfolio"
+                      ],
+                      "isPinned": true
+                    },
+                    {
+                      "queryRefs": [
+                        "Strategies.Strategy Group"
+                      ],
+                      "isPinned": true
+                    },
+                    {
+                      "queryRefs": [
+                        "Managers.Manager"
+                      ],
+                      "isPinned": true
+                    },
+                    {
+                      "queryRefs": [
+                        "Investments.Investment (legal name)"
+                      ],
+                      "isCollapsed": true,
+                      "isPinned": true
+                    }
+                  ],
+                  "root": {
+                    "identityValues": []
+                  }
+                }
+              ]
+            }
+          },
+          "40b9b89a7bbbda03bd5d": {
+            "filters": {
+              "byName": {
+                "a642d104ae05a6755d86": {
+                  "name": "a642d104ae05a6755d86",
+                  "type": "Advanced",
+                  "filter": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "p",
+                        "Entity": "Investment Metrics",
+                        "Type": 0
+                      },
+                      {
+                        "Name": "s",
+                        "Entity": "Settings",
+                        "Type": 0
+                      }
+                    ],
+                    "Where": [
+                      {
+                        "Condition": {
+                          "Comparison": {
+                            "ComparisonKind": 0,
+                            "Left": {
+                              "Measure": {
+                                "Expression": {
+                                  "SourceRef": {
+                                    "Source": "s"
+                                  }
+                                },
+                                "Property": "Investment Metric Exists"
+                              }
+                            },
+                            "Right": {
+                              "Literal": {
+                                "Value": "1L"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Settings"
+                        }
+                      },
+                      "Property": "Investment Metric Exists"
+                    }
+                  },
+                  "howCreated": 1
+                }
+              },
+              "byExpr": [
+                {
+                  "name": "fc3ca8fb04ee02c16894",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Strategies"
+                        }
+                      },
+                      "Property": "Strategy"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "selection": [
+                    {
+                      "properties": {
+                        "strictSingleSelect": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "false"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Strategies"
+                        }
+                      },
+                      "Property": "Strategy"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "7c896a63cb487027b095": {
+            "filters": {
+              "byName": {
+                "a642d104ae05a6755d86": {
+                  "name": "a642d104ae05a6755d86",
+                  "type": "Advanced",
+                  "filter": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "p",
+                        "Entity": "Investment Metrics",
+                        "Type": 0
+                      },
+                      {
+                        "Name": "s",
+                        "Entity": "Settings",
+                        "Type": 0
+                      }
+                    ],
+                    "Where": [
+                      {
+                        "Condition": {
+                          "Comparison": {
+                            "ComparisonKind": 0,
+                            "Left": {
+                              "Measure": {
+                                "Expression": {
+                                  "SourceRef": {
+                                    "Source": "s"
+                                  }
+                                },
+                                "Property": "Investment Metric Exists"
+                              }
+                            },
+                            "Right": {
+                              "Literal": {
+                                "Value": "1L"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Settings"
+                        }
+                      },
+                      "Property": "Investment Metric Exists"
+                    }
+                  },
+                  "howCreated": 1
+                }
+              },
+              "byExpr": [
+                {
+                  "name": "13c920614550b3895182",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investments"
+                        }
+                      },
+                      "Property": "Investment Series"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "selection": [
+                    {
+                      "properties": {
+                        "strictSingleSelect": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "false"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investments"
+                        }
+                      },
+                      "Property": "Investment Series"
+                    }
+                  }
+                ]
+              },
+              "expansionStates": [
+                {
+                  "roles": [
+                    "Values"
+                  ],
+                  "levels": [
+                    {
+                      "queryRefs": [
+                        "Investments.Investment Series"
+                      ],
+                      "isCollapsed": true,
+                      "identityKeys": [
+                        {
+                          "Column": {
+                            "Expression": {
+                              "SourceRef": {
+                                "Entity": "Investments"
+                              }
+                            },
+                            "Property": "Investment Series"
+                          }
+                        }
+                      ],
+                      "isPinned": true
+                    }
+                  ],
+                  "root": {
+                    "identityValues": []
+                  }
+                }
+              ]
+            }
+          },
+          "85c15d91216b6eb0a140": {
+            "filters": {
+              "byName": {
+                "a642d104ae05a6755d86": {
+                  "name": "a642d104ae05a6755d86",
+                  "type": "Advanced",
+                  "filter": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "p",
+                        "Entity": "Investment Metrics",
+                        "Type": 0
+                      },
+                      {
+                        "Name": "s",
+                        "Entity": "Settings",
+                        "Type": 0
+                      }
+                    ],
+                    "Where": [
+                      {
+                        "Condition": {
+                          "Comparison": {
+                            "ComparisonKind": 0,
+                            "Left": {
+                              "Measure": {
+                                "Expression": {
+                                  "SourceRef": {
+                                    "Source": "s"
+                                  }
+                                },
+                                "Property": "Investment Metric Exists"
+                              }
+                            },
+                            "Right": {
+                              "Literal": {
+                                "Value": "1L"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Settings"
+                        }
+                      },
+                      "Property": "Investment Metric Exists"
+                    }
+                  },
+                  "howCreated": 1
+                }
+              },
+              "byExpr": [
+                {
+                  "name": "c388b8a89a226843e000",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investments"
+                        }
+                      },
+                      "Property": "Investment (legal name)"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "selection": [
+                    {
+                      "properties": {
+                        "strictSingleSelect": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "false"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investments"
+                        }
+                      },
+                      "Property": "Investment (legal name)"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "8ef42767a818645ce71d": {
+            "filters": {
+              "byName": {
+                "a642d104ae05a6755d86": {
+                  "name": "a642d104ae05a6755d86",
+                  "type": "Advanced",
+                  "filter": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "p",
+                        "Entity": "Investment Metrics",
+                        "Type": 0
+                      },
+                      {
+                        "Name": "s",
+                        "Entity": "Settings",
+                        "Type": 0
+                      }
+                    ],
+                    "Where": [
+                      {
+                        "Condition": {
+                          "Comparison": {
+                            "ComparisonKind": 0,
+                            "Left": {
+                              "Measure": {
+                                "Expression": {
+                                  "SourceRef": {
+                                    "Source": "s"
+                                  }
+                                },
+                                "Property": "Investment Metric Exists"
+                              }
+                            },
+                            "Right": {
+                              "Literal": {
+                                "Value": "1L"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Settings"
+                        }
+                      },
+                      "Property": "Investment Metric Exists"
+                    }
+                  },
+                  "howCreated": 1
+                }
+              },
+              "byExpr": [
+                {
+                  "name": "3ad2f71101e0c8801710",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investment Currencies"
+                        }
+                      },
+                      "Property": "Investment CCY"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "selection": [
+                    {
+                      "properties": {
+                        "strictSingleSelect": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "false"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investment Currencies"
+                        }
+                      },
+                      "Property": "Investment CCY"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "903f319d013483e5e000": {
+            "filters": {
+              "byName": {
+                "a642d104ae05a6755d86": {
+                  "name": "a642d104ae05a6755d86",
+                  "type": "Advanced",
+                  "filter": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "p",
+                        "Entity": "Investment Metrics",
+                        "Type": 0
+                      },
+                      {
+                        "Name": "s",
+                        "Entity": "Settings",
+                        "Type": 0
+                      }
+                    ],
+                    "Where": [
+                      {
+                        "Condition": {
+                          "Comparison": {
+                            "ComparisonKind": 0,
+                            "Left": {
+                              "Measure": {
+                                "Expression": {
+                                  "SourceRef": {
+                                    "Source": "s"
+                                  }
+                                },
+                                "Property": "Investment Metric Exists"
+                              }
+                            },
+                            "Right": {
+                              "Literal": {
+                                "Value": "1L"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Settings"
+                        }
+                      },
+                      "Property": "Investment Metric Exists"
+                    }
+                  },
+                  "howCreated": 1
+                }
+              },
+              "byExpr": [
+                {
+                  "name": "bba5365f67aca42c598b",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Strategies"
+                        }
+                      },
+                      "Property": "Strategy Group"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "selection": [
+                    {
+                      "properties": {
+                        "strictSingleSelect": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "false"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Strategies"
+                        }
+                      },
+                      "Property": "Strategy Group"
+                    }
+                  }
+                ]
+              },
+              "expansionStates": [
+                {
+                  "roles": [
+                    "Values"
+                  ],
+                  "levels": [
+                    {
+                      "queryRefs": [
+                        "Strategies.Strategy Group"
+                      ],
+                      "isCollapsed": true,
+                      "identityKeys": [
+                        {
+                          "Column": {
+                            "Expression": {
+                              "SourceRef": {
+                                "Entity": "Strategies"
+                              }
+                            },
+                            "Property": "Strategy Group"
+                          }
+                        }
+                      ],
+                      "isPinned": true
+                    }
+                  ],
+                  "root": {
+                    "identityValues": [],
+                    "children": [
+                      {
+                        "identityValues": [
+                          {
+                            "Literal": {
+                              "Value": "'Infrastructure'"
+                            }
+                          }
+                        ],
+                        "isToggled": true
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "94db6bc03842de015481": {
+            "filters": {
+              "byName": {
+                "a642d104ae05a6755d86": {
+                  "name": "a642d104ae05a6755d86",
+                  "type": "Advanced",
+                  "filter": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "p",
+                        "Entity": "Investment Metrics",
+                        "Type": 0
+                      },
+                      {
+                        "Name": "s",
+                        "Entity": "Settings",
+                        "Type": 0
+                      }
+                    ],
+                    "Where": [
+                      {
+                        "Condition": {
+                          "Comparison": {
+                            "ComparisonKind": 0,
+                            "Left": {
+                              "Measure": {
+                                "Expression": {
+                                  "SourceRef": {
+                                    "Source": "s"
+                                  }
+                                },
+                                "Property": "Investment Metric Exists"
+                              }
+                            },
+                            "Right": {
+                              "Literal": {
+                                "Value": "1L"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Settings"
+                        }
+                      },
+                      "Property": "Investment Metric Exists"
+                    }
+                  },
+                  "howCreated": 1
+                }
+              },
+              "byExpr": [
+                {
+                  "name": "400cd060009b885803b5",
+                  "type": "Advanced",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investments"
+                        }
+                      },
+                      "Property": "Vintage"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "selection": [
+                    {
+                      "properties": {
+                        "strictSingleSelect": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "false"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Investments"
+                        }
+                      },
+                      "Property": "Vintage"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "9c3433e2e5862ca15021": {
+            "filters": {
+              "byName": {
+                "8cc5d4b906744b10a381": {
+                  "name": "8cc5d4b906744b10a381",
+                  "type": "Categorical",
+                  "filter": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "r",
+                        "Entity": "Reporting Currencies",
+                        "Type": 0
+                      }
+                    ],
+                    "Where": [
+                      {
+                        "Condition": {
+                          "In": {
+                            "Expressions": [
+                              {
+                                "Column": {
+                                  "Expression": {
+                                    "SourceRef": {
+                                      "Source": "r"
+                                    }
+                                  },
+                                  "Property": "Is Reporting Currency"
+                                }
+                              }
+                            ],
+                            "Values": [
+                              [
+                                {
+                                  "Literal": {
+                                    "Value": "true"
+                                  }
+                                }
+                              ]
+                            ]
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Reporting Currencies"
+                        }
+                      },
+                      "Property": "Is Reporting Currency"
+                    }
+                  },
+                  "howCreated": 1
+                }
+              },
+              "byExpr": [
+                {
+                  "name": "5b9b6b963cb7b93613b0",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Reporting Currencies"
+                        }
+                      },
+                      "Property": "Reporting CCY"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "listSlicer",
+              "objects": {
+                "merge": {
+                  "general": [
+                    {
+                      "properties": {
+                        "filter": {
+                          "filter": {
+                            "Version": 2,
+                            "From": [
+                              {
+                                "Name": "r",
+                                "Entity": "Reporting Currencies",
+                                "Type": 0
+                              }
+                            ],
+                            "Where": [
+                              {
+                                "Condition": {
+                                  "In": {
+                                    "Expressions": [
+                                      {
+                                        "Column": {
+                                          "Expression": {
+                                            "SourceRef": {
+                                              "Source": "r"
+                                            }
+                                          },
+                                          "Property": "Reporting CCY"
+                                        }
+                                      }
+                                    ],
+                                    "Values": [
+                                      [
+                                        {
+                                          "Literal": {
+                                            "Value": "'EUR'"
+                                          }
+                                        }
+                                      ]
+                                    ]
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "selection": [
+                    {
+                      "properties": {
+                        "strictSingleSelect": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "true"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Reporting Currencies"
+                        }
+                      },
+                      "Property": "Reporting CCY"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "bb288483dd6259d3e730": {
+            "filters": {
+              "byName": {
+                "a642d104ae05a6755d86": {
+                  "name": "a642d104ae05a6755d86",
+                  "type": "Advanced",
+                  "filter": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "p",
+                        "Entity": "Investment Metrics",
+                        "Type": 0
+                      },
+                      {
+                        "Name": "s",
+                        "Entity": "Settings",
+                        "Type": 0
+                      }
+                    ],
+                    "Where": [
+                      {
+                        "Condition": {
+                          "Comparison": {
+                            "ComparisonKind": 0,
+                            "Left": {
+                              "Measure": {
+                                "Expression": {
+                                  "SourceRef": {
+                                    "Source": "s"
+                                  }
+                                },
+                                "Property": "Investment Metric Exists"
+                              }
+                            },
+                            "Right": {
+                              "Literal": {
+                                "Value": "1L"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Settings"
+                        }
+                      },
+                      "Property": "Investment Metric Exists"
+                    }
+                  },
+                  "howCreated": 1
+                }
+              },
+              "byExpr": [
+                {
+                  "name": "2fd75f7d3434cc801790",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Asset Classes"
+                        }
+                      },
+                      "Property": "Asset Class"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "selection": [
+                    {
+                      "properties": {
+                        "strictSingleSelect": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "false"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Asset Classes"
+                        }
+                      },
+                      "Property": "Asset Class"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "d39870f532239b8e613b": {
+            "filters": {
+              "byName": {
+                "a642d104ae05a6755d86": {
+                  "name": "a642d104ae05a6755d86",
+                  "type": "Advanced",
+                  "filter": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "p",
+                        "Entity": "Investment Metrics",
+                        "Type": 0
+                      },
+                      {
+                        "Name": "s",
+                        "Entity": "Settings",
+                        "Type": 0
+                      }
+                    ],
+                    "Where": [
+                      {
+                        "Condition": {
+                          "Comparison": {
+                            "ComparisonKind": 0,
+                            "Left": {
+                              "Measure": {
+                                "Expression": {
+                                  "SourceRef": {
+                                    "Source": "s"
+                                  }
+                                },
+                                "Property": "Investment Metric Exists"
+                              }
+                            },
+                            "Right": {
+                              "Literal": {
+                                "Value": "1L"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Settings"
+                        }
+                      },
+                      "Property": "Investment Metric Exists"
+                    }
+                  },
+                  "howCreated": 1
+                }
+              },
+              "byExpr": [
+                {
+                  "name": "511f09d1b1e6d6a78bdd",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Regional Focus"
+                        }
+                      },
+                      "Property": "Region"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "selection": [
+                    {
+                      "properties": {
+                        "strictSingleSelect": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "false"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Regional Focus"
+                        }
+                      },
+                      "Property": "Region"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "d84227b705503750dc80": {
+            "filters": {
+              "byName": {
+                "a642d104ae05a6755d86": {
+                  "name": "a642d104ae05a6755d86",
+                  "type": "Advanced",
+                  "filter": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "p",
+                        "Entity": "Investment Metrics",
+                        "Type": 0
+                      },
+                      {
+                        "Name": "s",
+                        "Entity": "Settings",
+                        "Type": 0
+                      }
+                    ],
+                    "Where": [
+                      {
+                        "Condition": {
+                          "Comparison": {
+                            "ComparisonKind": 0,
+                            "Left": {
+                              "Measure": {
+                                "Expression": {
+                                  "SourceRef": {
+                                    "Source": "s"
+                                  }
+                                },
+                                "Property": "Investment Metric Exists"
+                              }
+                            },
+                            "Right": {
+                              "Literal": {
+                                "Value": "1L"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Settings"
+                        }
+                      },
+                      "Property": "Investment Metric Exists"
+                    }
+                  },
+                  "howCreated": 1
+                }
+              },
+              "byExpr": [
+                {
+                  "name": "6fb757ddc7e8c1048958",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Portfolios"
+                        }
+                      },
+                      "Property": "Portfolio"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "selection": [
+                    {
+                      "properties": {
+                        "strictSingleSelect": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "false"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Portfolios"
+                        }
+                      },
+                      "Property": "Portfolio"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "e7f440fdb35867139a9e": {
+            "filters": {
+              "byName": {
+                "a642d104ae05a6755d86": {
+                  "name": "a642d104ae05a6755d86",
+                  "type": "Advanced",
+                  "filter": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "p",
+                        "Entity": "Investment Metrics",
+                        "Type": 0
+                      },
+                      {
+                        "Name": "s",
+                        "Entity": "Settings",
+                        "Type": 0
+                      }
+                    ],
+                    "Where": [
+                      {
+                        "Condition": {
+                          "Comparison": {
+                            "ComparisonKind": 0,
+                            "Left": {
+                              "Measure": {
+                                "Expression": {
+                                  "SourceRef": {
+                                    "Source": "s"
+                                  }
+                                },
+                                "Property": "Investment Metric Exists"
+                              }
+                            },
+                            "Right": {
+                              "Literal": {
+                                "Value": "1L"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Settings"
+                        }
+                      },
+                      "Property": "Investment Metric Exists"
+                    }
+                  },
+                  "howCreated": 1
+                }
+              },
+              "byExpr": [
+                {
+                  "name": "11fdf9a5aed5603c5605",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Managers"
+                        }
+                      },
+                      "Property": "Manager"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "data": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Dropdown'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "selection": [
+                    {
+                      "properties": {
+                        "strictSingleSelect": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "false"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Managers"
+                        }
+                      },
+                      "Property": "Manager"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "f1267f4f3d10aa2350e0": {
+            "filters": {
+              "byName": {
+                "3fac5025ba049c0a3380": {
+                  "name": "3fac5025ba049c0a3380",
+                  "type": "Advanced",
+                  "filter": {
+                    "Version": 2,
+                    "From": [
+                      {
+                        "Name": "s",
+                        "Entity": "Settings",
+                        "Type": 0
+                      }
+                    ],
+                    "Where": [
+                      {
+                        "Condition": {
+                          "Comparison": {
+                            "ComparisonKind": 0,
+                            "Left": {
+                              "Measure": {
+                                "Expression": {
+                                  "SourceRef": {
+                                    "Source": "s"
+                                  }
+                                },
+                                "Property": "Investment Metric Exists"
+                              }
+                            },
+                            "Right": {
+                              "Literal": {
+                                "Value": "1L"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "expression": {
+                    "Measure": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Settings"
+                        }
+                      },
+                      "Property": "Investment Metric Exists"
+                    }
+                  },
+                  "howCreated": 1
+                }
+              },
+              "byExpr": [
+                {
+                  "name": "b2a38cacc158db3bed37",
+                  "type": "Categorical",
+                  "expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dates"
+                        }
+                      },
+                      "Property": "Date"
+                    }
+                  },
+                  "howCreated": 0
+                }
+              ]
+            },
+            "singleVisual": {
+              "visualType": "slicer",
+              "objects": {
+                "merge": {
+                  "general": [
+                    {
+                      "properties": {
+                        "filter": {
+                          "filter": {
+                            "Version": 2,
+                            "From": [
+                              {
+                                "Name": "d",
+                                "Entity": "Dates",
+                                "Type": 0
+                              }
+                            ],
+                            "Where": [
+                              {
+                                "Condition": {
+                                  "And": {
+                                    "Left": {
+                                      "Comparison": {
+                                        "ComparisonKind": 2,
+                                        "Left": {
+                                          "Column": {
+                                            "Expression": {
+                                              "SourceRef": {
+                                                "Source": "d"
+                                              }
+                                            },
+                                            "Property": "Date"
+                                          }
+                                        },
+                                        "Right": {
+                                          "Literal": {
+                                            "Value": "datetime'2023-01-01T00:00:00'"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "Right": {
+                                      "Comparison": {
+                                        "ComparisonKind": 3,
+                                        "Left": {
+                                          "Column": {
+                                            "Expression": {
+                                              "SourceRef": {
+                                                "Source": "d"
+                                              }
+                                            },
+                                            "Property": "Date"
+                                          }
+                                        },
+                                        "Right": {
+                                          "Literal": {
+                                            "Value": "datetime'2025-09-24T00:00:00'"
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "data": [
+                    {
+                      "properties": {
+                        "startDate": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "datetime'2023-01-01T00:00:00'"
+                            }
+                          }
+                        },
+                        "endDate": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "datetime'2025-09-23T00:00:00'"
+                            }
+                          }
+                        },
+                        "mode": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "'Between'"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  "selection": [
+                    {
+                      "properties": {
+                        "strictSingleSelect": {
+                          "expr": {
+                            "Literal": {
+                              "Value": "true"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "orderBy": [
+                {
+                  "Direction": 1,
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dates"
+                        }
+                      },
+                      "Property": "Date"
+                    }
+                  }
+                }
+              ],
+              "activeProjections": {
+                "Values": [
+                  {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "Dates"
+                        }
+                      },
+                      "Property": "Date"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "c842cc4a781959896207": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "b15e5be2b566be74000e": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "c8e07bb404e68562b010": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "d252d30787e90d017648": {
+            "singleVisual": {
+              "visualType": "actionButton",
+              "objects": {}
+            }
+          },
+          "010916256e0b8061bd85": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "44cca990d17a0c97c6ee": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "134e225071a74a235480": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "b75311629c61d5a109b8": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "669487f86e6ea11da238": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          },
+          "a2c22b4bbb120a062008": {
+            "singleVisual": {
+              "visualType": "shape",
+              "objects": {}
+            }
+          },
+          "169d778ad0a4095dd0a7": {
+            "singleVisual": {
+              "visualType": "textbox",
+              "objects": {}
+            }
+          }
+        },
+        "visualContainerGroups": {
+          "017a8e10554503d94b00": {
+            "isHidden": false
+          }
+        }
+      }
+    },
+    "objects": {
+      "merge": {
+        "outspacePane": [
+          {
+            "properties": {
+              "expanded": {
+                "expr": {
+                  "Literal": {
+                    "Value": "true"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

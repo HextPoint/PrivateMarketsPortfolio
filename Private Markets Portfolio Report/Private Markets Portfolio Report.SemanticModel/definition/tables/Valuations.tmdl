@@ -1,0 +1,84 @@
+table Valuations
+	isHidden
+	lineageTag: 481d374b-aece-460c-91af-4a1cafd60e59
+
+	column PortfolioKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 123e9b77-b985-4f38-bf5b-bd3d4ce143fd
+		summarizeBy: count
+		sourceColumn: PortfolioKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvestmentKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ee49a404-ece1-42b5-aaa9-9fd21319c105
+		summarizeBy: count
+		sourceColumn: InvestmentKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Amount
+		dataType: decimal
+		isHidden
+		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		lineageTag: 757c359b-3bf0-4a7b-8929-382fd5ab74c5
+		summarizeBy: sum
+		sourceColumn: Amount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column Date
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: dabeda77-0cef-4644-a1c8-8d4275625392
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variation
+			isDefault
+			relationship: 7f2e5c34-3a62-4a5c-9b4f-5de2417ea26c
+			defaultHierarchy: LocalDateTable_9eedec17-a5d9-487f-9ce5-f414e912a8ef.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	partition Valuations = m
+		mode: import
+		queryGroup: 'Model tables'
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents(ExcelFileURL), null, true),
+				    Valuations_Table = Source{[Item="Valuations",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Valuations_Table,{{"Date", type date}, {"Portfolio", type text}, {"Investment", type text}, {"Amount", Currency.Type}}),
+				    RemovedFutureDates = Table.SelectRows(#"Changed Type", each [Date] < DateTime.Date(DateTime.LocalNow())),
+				    #"Merged Queries" = Table.NestedJoin(RemovedFutureDates, {"Portfolio"}, Portfolios, {"Portfolio"}, "Portfolios", JoinKind.LeftOuter),
+				    #"Expanded Portfolios" = Table.ExpandTableColumn(#"Merged Queries", "Portfolios", {"PortfolioKey"}, {"PortfolioKey"}),
+				    #"Merged Queries1" = Table.NestedJoin(#"Expanded Portfolios", {"Investment"}, Investments, {"Investment"}, "Investments", JoinKind.LeftOuter),
+				    #"Expanded Investments" = Table.ExpandTableColumn(#"Merged Queries1", "Investments", {"InvestmentKey"}, {"InvestmentKey"}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Expanded Investments",{"Portfolio", "Investment"})
+				in
+				    #"Removed Columns"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

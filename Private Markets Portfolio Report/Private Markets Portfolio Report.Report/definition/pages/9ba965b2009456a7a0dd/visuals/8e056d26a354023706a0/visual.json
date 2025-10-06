@@ -1,0 +1,441 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "8e056d26a354023706a0",
+  "position": {
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "height": 320,
+    "width": 1220.2262775570123,
+    "tabOrder": 3000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Portfolios"
+                    }
+                  },
+                  "Property": "Portfolio"
+                }
+              },
+              "queryRef": "Portfolios.Portfolio",
+              "nativeQueryRef": "Portfolio",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investments"
+                    }
+                  },
+                  "Property": "Vintage"
+                }
+              },
+              "queryRef": "Investments.Vintage",
+              "nativeQueryRef": "Vintage",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Strategies"
+                    }
+                  },
+                  "Property": "Strategy Group"
+                }
+              },
+              "queryRef": "Strategies.Strategy Group",
+              "nativeQueryRef": "Strategy Group",
+              "active": false
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investments"
+                    }
+                  },
+                  "Property": "Investment (legal name)"
+                }
+              },
+              "queryRef": "Investments.Investment (legal name)",
+              "nativeQueryRef": "Investment (legal name)",
+              "active": false
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Commitment"
+                }
+              },
+              "queryRef": "Investment Metrics.Commitment",
+              "nativeQueryRef": "Commitment"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "% Called"
+                }
+              },
+              "queryRef": "Investment Metrics.% Called",
+              "nativeQueryRef": "% Called"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Weight"
+                }
+              },
+              "queryRef": "Investment Metrics.Weight",
+              "nativeQueryRef": "Weight"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Valuation"
+                }
+              },
+              "queryRef": "Investment Metrics.Valuation",
+              "nativeQueryRef": "Valuation"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Total P&L ITD"
+                }
+              },
+              "queryRef": "Investment Metrics.Total P&L ITD",
+              "nativeQueryRef": "Total P&L ITD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Price P&L ITD"
+                }
+              },
+              "queryRef": "Investment Metrics.Price P&L ITD",
+              "nativeQueryRef": "Price P&L ITD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "FX P&L ITD"
+                }
+              },
+              "queryRef": "Investment Metrics.FX P&L ITD",
+              "nativeQueryRef": "FX P&L ITD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Cross P&L ITD"
+                }
+              },
+              "queryRef": "Investment Metrics.Cross P&L ITD",
+              "nativeQueryRef": "Cross P&L ITD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "IRR ITD"
+                }
+              },
+              "queryRef": "Investment Metrics.IRR % ITD",
+              "nativeQueryRef": "IRR ITD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "TVPI"
+                }
+              },
+              "queryRef": "Investment Metrics.TVPI",
+              "nativeQueryRef": "TVPI"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "DPI"
+                }
+              },
+              "queryRef": "Investment Metrics.DPI",
+              "nativeQueryRef": "DPI"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Portfolios"
+                  }
+                },
+                "Property": "Portfolio"
+              }
+            },
+            "direction": "Descending"
+          },
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Investments"
+                  }
+                },
+                "Property": "Vintage"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "expansionStates": [
+      {
+        "roles": [
+          "Rows"
+        ],
+        "levels": [
+          {
+            "queryRefs": [
+              "Portfolios.Portfolio"
+            ],
+            "identityKeys": [
+              {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Portfolios"
+                    }
+                  },
+                  "Property": "Portfolio"
+                }
+              }
+            ],
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "Investments.Vintage"
+            ],
+            "isCollapsed": true,
+            "identityKeys": [
+              {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investments"
+                    }
+                  },
+                  "Property": "Vintage"
+                }
+              }
+            ],
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "Strategies.Strategy Group"
+            ],
+            "isCollapsed": true,
+            "identityKeys": [
+              {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Strategies"
+                    }
+                  },
+                  "Property": "Strategy Group"
+                }
+              }
+            ],
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "Investments.Investment (legal name)"
+            ],
+            "isCollapsed": true,
+            "isPinned": true
+          }
+        ],
+        "root": {}
+      }
+    ],
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "layout": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Compact'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTotals": [
+        {
+          "properties": {
+            "perRowLevel": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "rowHeaders": [
+        {
+          "properties": {
+            "steppedLayoutIndentation": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "5D"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualTooltip": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "section": {
+              "expr": {
+                "Literal": {
+                  "Value": "'96dad30308402077a603'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "f08c35a7e92401b17e41"
+}

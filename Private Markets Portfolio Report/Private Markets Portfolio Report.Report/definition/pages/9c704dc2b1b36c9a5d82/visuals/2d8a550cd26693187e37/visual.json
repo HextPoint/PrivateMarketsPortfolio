@@ -1,0 +1,319 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "2d8a550cd26693187e37",
+  "position": {
+    "x": 0,
+    "y": 79.324647342019333,
+    "z": 5000,
+    "height": 280,
+    "width": 400,
+    "tabOrder": 11000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Portfolio Count"
+                }
+              },
+              "queryRef": "Investment Metrics.Portfolio Count",
+              "nativeQueryRef": "Portfolio Count"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Valuation (Local)"
+                }
+              },
+              "queryRef": "Investment Metrics.Valuation (Local)",
+              "nativeQueryRef": "Valuation (Local)",
+              "displayName": "Valuation (Local)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "P&L ITD (Local)"
+                }
+              },
+              "queryRef": "Investment Metrics.P&L ITD (Local)",
+              "nativeQueryRef": "P&L (Local) ITD",
+              "displayName": "P&L (Local) ITD"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "IRR ITD (Local)"
+                }
+              },
+              "queryRef": "Investment Metrics.IRR ITD (Local)",
+              "nativeQueryRef": "IRR ITD (Local)",
+              "displayName": "IRR ITD (Local)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "TVPI (Local)"
+                }
+              },
+              "queryRef": "Investment Metrics.TVPI (Local)",
+              "nativeQueryRef": "TVPI (Local)",
+              "displayName": "TVPI (Local)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "DPI (Local)"
+                }
+              },
+              "queryRef": "Investment Metrics.DPI (Local)",
+              "nativeQueryRef": "DPI (Local)",
+              "displayName": "DPI (Local)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "RVPI (Local)"
+                }
+              },
+              "queryRef": "Investment Metrics.RVPI (Local)",
+              "nativeQueryRef": "RVPI (Local)",
+              "displayName": "RVPI (Local)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Paid-In Capital ITD (Local)"
+                }
+              },
+              "queryRef": "Investment Metrics.Paid-In Capital ITD (Local)",
+              "nativeQueryRef": "Paid-In Capital ITD (Local)",
+              "displayName": "Paid-In Capital ITD (Local)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Distributed Capital ITD (Local)"
+                }
+              },
+              "queryRef": "Investment Metrics.Distributed Capital ITD (Local)",
+              "nativeQueryRef": "Distributed Capital ITD (Local)",
+              "displayName": "Distributed Capital ITD (Local)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Commitment (Local)"
+                }
+              },
+              "queryRef": "Investment Metrics.Commitment (Local)",
+              "nativeQueryRef": "Commitment (Local)",
+              "displayName": "Commitment (Local)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "% Called"
+                }
+              },
+              "queryRef": "Investment Metrics.% Called",
+              "nativeQueryRef": "% Called",
+              "displayName": "% Called"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Net Called (Local)"
+                }
+              },
+              "queryRef": "Investment Metrics.Net Called (Local)",
+              "nativeQueryRef": "Net Called (Local)",
+              "displayName": "Net Called (Local)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Outstanding Commitment (Local)"
+                }
+              },
+              "queryRef": "Investment Metrics.Outstanding Commitment (Local)",
+              "nativeQueryRef": "Outstanding Commitment (Local)",
+              "displayName": "Outstanding Commitment (Local)"
+            }
+          ],
+          "fieldParameters": [
+            {
+              "parameterExpr": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Metric Selection"
+                    }
+                  },
+                  "Property": "Metric Selection"
+                }
+              },
+              "index": 1,
+              "length": 12
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "values": [
+        {
+          "properties": {
+            "valuesOnRow": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            },
+            "fontFamily": {
+              "expr": {
+                "Literal": {
+                  "Value": "'''Courier New'''"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTotals": [
+        {
+          "properties": {
+            "columnSubtotals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "rowSubtotals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Investment Metrics'"
+                }
+              }
+            },
+            "fontSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "12D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "45d909a350169609a751"
+}

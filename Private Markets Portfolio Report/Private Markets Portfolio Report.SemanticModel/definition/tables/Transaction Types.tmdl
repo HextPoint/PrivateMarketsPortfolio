@@ -1,0 +1,69 @@
+table 'Transaction Types'
+	lineageTag: 02809ed7-3e94-41db-b928-cbb078348ea7
+
+	/// The transaction type name.
+	column 'Transaction Type'
+		dataType: string
+		lineageTag: 6d1b4fbe-760e-4744-ba48-62b10805a36a
+		summarizeBy: none
+		sourceColumn: Transaction Type
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TransactionTypeKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 3a69361b-a27e-400d-b7c5-68b7e6585ba7
+		summarizeBy: none
+		sourceColumn: TransactionTypeKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Indicates whether the transaction type is a secondary purchase.
+	column 'Is Secondary Purchase'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0f2edec9-e436-456b-ad58-755a3ed07664
+		summarizeBy: none
+		sourceColumn: Is Secondary Purchase
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Indicates whether the transaction type is contribution.
+	column 'Is Contribution'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 57ba916a-0d77-48d8-91ba-57207e26ad6f
+		summarizeBy: none
+		sourceColumn: Is Contribution
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Transaction Types' = m
+		mode: import
+		queryGroup: 'Model tables'
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents(ExcelFileURL), null, true),
+				    Transaction_Types_Table = Source{[Item="Transaction_Types",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Transaction_Types_Table,{{"Transaction Type", type text},{"Is Contribution", type logical},{"Is Secondary Purchase", type logical}}),
+				    #"Added Index" = Table.AddIndexColumn(#"Changed Type", "TransactionTypeKey", 1, 1, Int64.Type),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Added Index",{"TransactionTypeKey", "Transaction Type", "Is Contribution"})
+				in
+				    #"Reordered Columns"
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

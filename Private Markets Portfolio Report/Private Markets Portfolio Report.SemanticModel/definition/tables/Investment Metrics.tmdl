@@ -1,0 +1,1399 @@
+table 'Investment Metrics'
+	lineageTag: 85177c62-00f2-49b3-b0e1-7bcd1e8ca48a
+
+	/// The latest valuation in the reporting currency. The manual valuation in the investment currency is adjusted by net cash flow and converted using the spot FX rate.
+	measure Valuation = HextPoint.PowerBI.HasOneReportingCurrency(HextPoint.PowerBI.ClosingValue(SUM('Investment Metrics'[CurrentValuationAmount])))
+		displayFolder: Valuations Metrics (Reporting Currency)
+		lineageTag: e8496ee2-00a4-4d14-8164-5ee5a9a2d3cf
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// The valuation as of the start of day on the minimum date in the reporting currency, which closing valuation on the date prior to the minimum date. The latest manual valuation in the investment currency is adjusted by the net cash flow in the investment currency and then converted using the spot FX rate.
+	measure 'Opening Valuation' = HextPoint.PowerBI.HasOneReportingCurrency(HextPoint.PowerBI.OpeningValue(SUM('Investment Metrics'[PriorValuationAmount])))
+		displayFolder: Valuations Metrics (Reporting Currency)
+		lineageTag: 17655896-6688-45ab-8f5c-fd0d2fb0c3b4
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// The change in valuation during the period in the reporting currency.
+	measure 'Valuation Change' = [Valuation] - [Opening Valuation]
+		displayFolder: Valuations Metrics (Reporting Currency)
+		lineageTag: cc7dafa0-cadb-489c-a9b0-7f38b5ce76a0
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// Only visible when there is a single investment currency in the filter context. the latest valuation in the investment currency. The latest manual valuation is adjusted by the net cash flow.
+	measure 'Valuation (Local)' = HextPoint.PowerBI.InvestmentCurrencyMeasure(HextPoint.PowerBI.ClosingValue(SUM('Investment Metrics'[CurrentValuationAmount])))
+		displayFolder: Valuations Metrics (Investment Currency)
+		lineageTag: faf7c190-6fca-4173-b014-68fe723fe4f4
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// Only visible when there is a single investment currency in the filter context. The valuation as of the start of day on the minimum date in the investment currency, which closing valuation on the date prior to the minimum date. The latest manual valuation is adjusted by the net cash flow.
+	measure 'Opening Valuation (Local)' = HextPoint.PowerBI.InvestmentCurrencyMeasure(HextPoint.PowerBI.OpeningValue(SUM('Investment Metrics'[PriorValuationAmount])))
+		displayFolder: Valuations Metrics (Investment Currency)
+		lineageTag: e6d7226a-1b4e-4a94-967e-f021743917b0
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// Only visible when there is a single investment currency in the filter context. The change in valuation during the period in the investment currency.
+	measure 'Valuation Change (Local)' = [Valuation (Local)] - [Opening Valuation (Local)]
+		displayFolder: Valuations Metrics (Investment Currency)
+		lineageTag: 4a997001-5fa7-4a0e-9125-c920511a92c2
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// The weight across investments in the current filter context using spot FX rate and latest valuation.
+	measure Weight = ```
+			
+				
+			VAR MaxDateInFilter = MAX('Dates'[Date])
+			VAR MaxDate = TREATAS({MaxDateInFilter}, 'Dates'[Date])
+			VAR ClosingValuatioAllSelections = CALCULATE(
+			                                            'Investment Metrics'[Valuation],
+														ALLSELECTED(),
+			                                            MaxDate
+			                                        )
+			
+			VAR Result = IF(
+			    HASONEVALUE('Reporting Currencies'[CurrencyKey]),
+			    DIVIDE('Investment Metrics'[Valuation],ClosingValuatioAllSelections),
+			    BLANK()
+			    )
+			
+			RETURN Result
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Valuations Metrics (Reporting Currency)
+		lineageTag: af8b66b2-4539-46a1-8d71-4d8abb0e849d
+
+	/// The weight across investments in the current filter context using spot FX rate as of the start of day on the minimum date. This is same as the weight on the day prior minimum date.
+	measure 'Opening Weight' = ```
+			
+				
+			VAR MinDateInFilter = MIN('Dates'[Date])
+			VAR MinDate = TREATAS({MinDateInFilter}, 'Dates'[Date])
+			VAR OpeningValuatioAllSelections = CALCULATE(
+			                                            'Investment Metrics'[Opening Valuation],
+														ALLSELECTED(),
+			                                            MinDate
+			                                        )
+			
+			VAR Result = IF(
+			    HASONEVALUE('Reporting Currencies'[CurrencyKey]),
+			    DIVIDE('Investment Metrics'[Opening Valuation],OpeningValuatioAllSelections),
+			    BLANK()
+			    )
+			
+			RETURN Result
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Valuations Metrics (Reporting Currency)
+		lineageTag: 6fa1ca5f-09b2-479c-aabe-c52832ba2ed9
+
+	/// The change in weight during the period.
+	measure 'Weight Change' = [Weight] - [Opening Weight]
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Valuations Metrics (Reporting Currency)
+		lineageTag: 5a8c2665-fd63-4264-967f-eeb915313cfb
+
+	/// Internal rate of return (IRR) in the reporting currency for the selected date window.
+	measure IRR = ```
+			
+				
+			VAR MinDateInFilter = MIN('Dates'[Date])
+			VAR MaxDateInFilter = MAX('Dates'[Date])
+			VAR MaxDate = TREATAS({MaxDateInFilter}, 'Dates'[Date])
+			
+			VAR OpeningValuation = ROW (
+			    "Date", MinDateInFilter,
+			    "CashFlowAmount", - [Opening Valuation]
+			)
+				
+			VAR CashFlows = 
+			  ADDCOLUMNS(
+						    SUMMARIZE(     
+			                        	'Investment Metrics',
+								    	'Investment Metrics'[Date]
+									  ),
+							"CashFlowAmount", [Cash Flow]
+						)
+				
+			VAR ClosingValuation = ROW (
+			    "Date", MaxDateInFilter,
+			    "CashFlowAmount", [Valuation]
+			)
+					
+			VAR UnionCashFlows =
+				UNION(OpeningValuation,CashFlows,ClosingValuation)
+				
+			VAR FilteredCashFlows =
+				FILTER(UnionCashFlows, [CashFlowAmount] <> 0)
+				
+			VAR IRRCalc = IFERROR(
+				XIRR(
+					FilteredCashFlows,
+					[CashFlowAmount],
+					[Date],
+					0.1,
+					BLANK()
+				),
+				BLANK()
+			)
+			
+			VAR Result = IF(
+				HASONEVALUE('Reporting Currencies'[CurrencyKey]),
+				IRRCalc,
+				BLANK()
+			)
+			
+			RETURN Result
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: 1fbab32a-67b7-4f3c-8b9c-4a5e626da941
+
+	/// The net cash flow during the period, expressed in the reporting currency. The spot FX rate on each cash flow date is used for currency conversion.
+	measure 'Cash Flow' = IF(HASONEVALUE('Reporting Currencies'[CurrencyKey]),SUM('Investment Metrics'[DailyNetCashFlow]),BLANK())
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: 9fc17e7f-5a8d-4cbb-a8ab-94f4b2b22f71
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// Only visible when there is a single investment currency in the filter context. Shows the net cash flow during the period in the investment currency.
+	measure 'Cash Flow (Local)' = HextPoint.PowerBI.InvestmentCurrencyMeasure(SUM('Investment Metrics'[DailyNetCashFlow]))
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: 5d410b36-7e87-4090-91cc-0625fe5c7b96
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// Total P&L in the reporting currency between the minimum and maximum date.
+	measure 'Total P&L' = 'Investment Metrics'[FX & Cross P&L] + 'Investment Metrics'[Price P&L]
+		displayFolder: P&L Metrics (Reporting Currency)
+		lineageTag: 71672609-5b6f-4d80-94cc-6be45593153f
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// The P&L attributable to changes in price/valuation.
+	measure 'Price P&L' = HextPoint.PowerBI.HasOneReportingCurrency(SUM('Investment Metrics'[PricePnLAmount]))
+		displayFolder: P&L Metrics (Reporting Currency)
+		lineageTag: 5d153df8-f84f-4513-adea-a6163db5ec51
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// The P&L attributable to changes in FX rates between the investment currency and reporting currency. The "on-market" method is used for FX P&L attribution.
+	measure 'FX P&L' = IF(HASONEVALUE('Reporting Currencies'[CurrencyKey]),SUM('Investment Metrics'[FXPnLAmount]),BLANK())
+		displayFolder: P&L Metrics (Reporting Currency)
+		lineageTag: 0421b5dd-97d4-4ee7-83db-a71b3116d224
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// Only visible when there is a single investment currency in the filter context. The P&L in the investment currency.
+	measure 'P&L (Local)' = HextPoint.PowerBI.InvestmentCurrencyMeasure(SUM('Investment Metrics'[PricePnLAmount]))
+		displayFolder: P&L Metrics (Investment Currency)
+		lineageTag: fa6a7781-61e3-40d5-95d4-a4146312a4af
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// Cross P&L in the reporting currency, representing the residual P&L resulting from combined changes in valuation (price) and FX rates. For example, a 10% change in price and a 10% change in FX rate results in a 21% total change; the cross P&L accounts for the additional 1% change.
+	measure 'Cross P&L' = IF(HASONEVALUE('Reporting Currencies'[CurrencyKey]),SUM('Investment Metrics'[CrossPnLAmount]),BLANK())
+		displayFolder: P&L Metrics (Reporting Currency)
+		lineageTag: a74e7422-dad4-4f89-baab-8a17109d99de
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// The FX & Cross P&L is the sum of the FX P&L and the Cross P&L in the reporting currency.
+	measure 'FX & Cross P&L' = IF(HASONEVALUE('Reporting Currencies'[CurrencyKey]),[FX P&L] + [Cross P&L],BLANK())
+		displayFolder: P&L Metrics (Reporting Currency)
+		lineageTag: bb7155b5-91ad-480d-89ba-3273f6ee1fb2
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// Only visible when there is a single investment currency in the filter context. Internal rate of return in the investment currency during the date window.
+	measure 'IRR (Local)' = ```
+			
+				
+			VAR MinDateInFilter = MIN('Dates'[Date])
+			VAR MaxDateInFilter = MAX('Dates'[Date])
+			VAR MaxDate = TREATAS({MaxDateInFilter}, 'Dates'[Date])
+			
+			VAR OpeningValuation = ROW (
+			    "Date", MinDateInFilter,
+			    "CashFlowAmount", - [Opening Valuation (Local)]
+			)
+				
+			VAR CashFlows = 
+			  ADDCOLUMNS(
+						    SUMMARIZE(     
+			                        	'Investment Metrics',
+								    	'Investment Metrics'[Date]
+									  ),
+							"CashFlowAmount", [Cash Flow (Local)]
+						)
+				
+			VAR ClosingValuation = ROW (
+			    "Date", MaxDateInFilter,
+			    "CashFlowAmount", [Valuation (Local)]
+			)
+					
+			VAR UnionCashFlows =
+				UNION(OpeningValuation,CashFlows,ClosingValuation)
+				
+			VAR FilteredCashFlows =
+				FILTER(UnionCashFlows, [CashFlowAmount] <> 0)
+				
+			VAR IRRCalc = IFERROR(
+				XIRR(
+					FilteredCashFlows,
+					[CashFlowAmount],
+					[Date],
+					0.1,
+					BLANK()
+				),
+				BLANK()
+			)
+			
+			VAR Result = IF(
+				HASONEVALUE('Investment Metrics'[CurrencyKey]),
+				IRRCalc,
+				BLANK()
+			)
+			
+			RETURN Result
+			```
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: 0f1a10d5-2a7c-4566-b33c-1818d16c5b09
+
+	/// The amount of paid-in capital in the reporting currency. The paid-in amount is converted to the reporting currency using the latest spot FX rate as of each transaction.
+	measure 'Paid-In Capital' = HextPoint.PowerBI.HasOneReportingCurrency(-SUM('Investment Metrics'[DailyPaidInAmount]))
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: 335ef616-7787-4fc2-978f-4239c0ed06d2
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// The amount of capital distributed between the minimum date and maximum date in the reporting currency.
+	measure 'Distributed Capital' = IF(HASONEVALUE('Reporting Currencies'[CurrencyKey]),SUM('Investment Metrics'[DailyDistributedAmount]),BLANK())
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: b76a142a-c15f-4fbb-b1c8-c4636d2fae99
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// Distributed capital since inception, divided by paid-in capital since inception, in the reporting currency.
+	measure DPI = DIVIDE('Investment Metrics'[Distributed Capital ITD],-'Investment Metrics'[Paid-In Capital ITD])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: 5806c361-3878-4f7f-a498-bbf013701a30
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// The residual value (i.e. current valuation) plus the distributed capital divided by the paid-in capital since inception in the reporting currency.
+	measure TVPI = DIVIDE('Investment Metrics'[Valuation] + 'Investment Metrics'[Distributed Capital ITD],-'Investment Metrics'[Paid-In Capital ITD])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: 598ebe7d-4b7d-4153-8f56-ca210fe1f2b6
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// The amount of paid-in capital in the reporting currency since inception. The paid-in amount is converted to the reporting currency using the latest spot FX rate as of each transaction.
+	measure 'Paid-In Capital ITD' = HextPoint.PowerBI.InceptionToDate([Paid-In Capital])
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: cfc5a45c-7b33-4117-9fc8-8ef132638d41
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// The amount of capital distributed since inception to the maximum date in the reporting currency.
+	measure 'Distributed Capital ITD' = HextPoint.PowerBI.InceptionToDate('Investment Metrics'[Distributed Capital])
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: 78bf7d5d-ce71-4018-9c03-c9533f3eb8ae
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// Total P&L in the reporting currency since inception.
+	measure 'Total P&L ITD' = HextPoint.PowerBI.InceptionToDate('Investment Metrics'[Total P&L])
+		displayFolder: P&L Metrics (Reporting Currency)
+		lineageTag: 148bed45-7c12-45c1-944c-ffb6b25a2106
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// Residual value (current valuation) divided by paid-in capital since inception, in the reporting currency.
+	measure RVPI = DIVIDE('Investment Metrics'[Valuation],-'Investment Metrics'[Paid-In Capital ITD])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: f1935345-75f6-40a6-ae7d-22080210942f
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Only visible when there is a single investment currency in the filter context. The amount of capital distributed between the minimum date and maximum date in the investment currency.
+	measure 'Distributed Capital (Local)' = HextPoint.PowerBI.InvestmentCurrencyMeasure(SUM('Investment Metrics'[DailyDistributedAmount]))
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: 28e4e6ac-68fc-4745-85b6-a22c309dfc3b
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// Only visible when there is a single investment currency in the filter context. The amount of capital distributed since inception to the maximum date in the investment currency.
+	measure 'Distributed Capital ITD (Local)' = HextPoint.PowerBI.InceptionToDate([Distributed Capital (Local)])
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: 88cc4e50-abeb-41d3-a2f3-2d4a278a3f2e
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// Only visible when there is a single investment currency in the filter context. The amount of paid-in capital in the investment currency.
+	measure 'Paid-In Capital (Local)' = HextPoint.PowerBI.InvestmentCurrencyMeasure(-SUM('Investment Metrics'[DailyPaidInAmount]))
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: 6659e964-6b3b-468f-9fd4-76451856dd03
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// Only visible when there is a single investment currency in the filter context. The amount of paid-in capital in the investment currency since inception.
+	measure 'Paid-In Capital ITD (Local)' = HextPoint.PowerBI.InceptionToDate([Paid-In Capital (Local)])
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: 137c95ae-a7b6-44d9-9788-c5eab5231067
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// Only visible when there is a single investment currency in the filter context. Distributed capital since inception divided by the paid-in capital since inception in the investment currency.
+	measure 'DPI (Local)' = DIVIDE('Investment Metrics'[Distributed Capital ITD (Local)],-'Investment Metrics'[Paid-In Capital ITD (Local)])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: 6255c005-49f7-4031-9f74-9a6aa47e598e
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Only visible when there is a single investment currency in the filter context. The residual value (i.e. current valuation) divided by the paid-in capital since inception in the investment currency.
+	measure 'RVPI (Local)' = DIVIDE('Investment Metrics'[Valuation (Local)],-'Investment Metrics'[Paid-In Capital ITD (Local)])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: 4cc288a6-48f0-41ff-95f9-0a5d7aac394b
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Only visible when there is a single investment currency in the filter context. The residual value (i.e. current valuation) plus the distributed capital divided by the paid-in capital since inception in the investment currency.
+	measure 'TVPI (Local)' = DIVIDE('Investment Metrics'[Valuation (Local)] + 'Investment Metrics'[Distributed Capital ITD (Local)],-'Investment Metrics'[Paid-In Capital ITD (Local)])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: 86be428a-394b-4e62-9737-a2a2c5041228
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Internal rate of return in the reporting currency since inception.
+	measure 'IRR ITD' = HextPoint.PowerBI.InceptionToDate('Investment Metrics'[IRR])
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: 89ec406f-c342-4564-8a05-f1ac3a203ef0
+
+	/// Only visible when there is a single investment currency in the filter context. Internal rate of return in the investment currency since inception.
+	measure 'IRR ITD (Local)' = HextPoint.PowerBI.InceptionToDate('Investment Metrics'[IRR (Local)])
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: aa3b9be8-c458-4ced-8c92-d4c3b41a0a9d
+
+	/// Used in visuals with date as a column, row, or axis. Shows cumulative net cash flow in the reporting currency from the minimum date up to the current date in the visual.
+	measure 'Cumulative Cash Flow' = HextPoint.PowerBI.CumulativeToDate('Investment Metrics'[Cash Flow])
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: 41fc0d5f-e7e6-4833-be36-50788827234b
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// Only visible when there is a single investment currency in the filter context. For use in visuals with the date in a column/row/axis. The cumulative cash flow in the investment currency between the minimum date and up to the current date in the visual.
+	measure 'Cumulative Cash Flow (Local)' = HextPoint.PowerBI.CumulativeToDate('Investment Metrics'[Cash Flow (Local)])
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: 826aa758-fb7c-4b8a-bc5c-dab2b93c1786
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// The current commitment amount, converted to the reporting currency using the spot FX rate.
+	measure Commitment = HextPoint.PowerBI.HasOneReportingCurrency(HextPoint.PowerBI.ClosingValue(SUM('Investment Metrics'[CurrentCommitmentAmount])))
+		displayFolder: Commitment Metrics (Reporting Currency)
+		lineageTag: ead422cc-07fa-4d67-91bb-93afcbcecb56
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// The residual value (i.e. current valuation) plus the distributed capital divided by the paid-in capital between the minimum date and the maximum date plus the opening valuation (i.e. as if the investment(s) were purchased on the minimum date) in the reporting currency.
+	measure 'TVPI Window' = DIVIDE('Investment Metrics'[Valuation] + 'Investment Metrics'[Distributed Capital],'Investment Metrics'[Opening Valuation] - 'Investment Metrics'[Paid-In Capital])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: 94ab0a19-99ca-4507-8ef8-6968b42750af
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// The residual value (i.e. current valuation) divided by the paid-in capital between the minimum date and the maximum date plus the opening valuation (i.e. as if the investment(s) were purchased on the minimum date) in the reporting currency.
+	measure 'RVPI Window' = DIVIDE('Investment Metrics'[Valuation],'Investment Metrics'[Opening Valuation] - 'Investment Metrics'[Paid-In Capital])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: 36b994d3-a0dd-4752-88e9-a55dbb4f4f98
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Distributed capital during the period divided by the paid-in capital during the period plus the opening valuation (i.e. as if the investment(s) were purchased on the minimum date) in the reporting currency.
+	measure 'DPI Window' = DIVIDE('Investment Metrics'[Distributed Capital],'Investment Metrics'[Opening Valuation]-'Investment Metrics'[Paid-In Capital])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: 655b7b2b-8081-402b-9151-7fbaf13e8ecc
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Only visible when there is a single investment currency in the filter context. The residual value (i.e. current valuation) plus the distributed capital divided by the paid-in capital between the minimum date and the maximum date plus the opening valuation (i.e. as if the investment(s) were purchased on the minimum date) in the investment currency.
+	measure 'TVPI Window (Local)' = DIVIDE('Investment Metrics'[Valuation (Local)] + 'Investment Metrics'[Distributed Capital (Local)],'Investment Metrics'[Opening Valuation (Local)] - 'Investment Metrics'[Paid-In Capital (Local)])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: 12c8dc13-da44-4098-abbf-d3fc65a7ec88
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Only visible when there is a single investment currency in the filter context. The residual value (i.e. current valuation) divided by the paid-in capital between the minimum date and the maximum date plus the opening valuation (i.e. as if the investment(s) were purchased on the minimum date) in the investment currency.
+	measure 'RVPI Window (Local)' = DIVIDE('Investment Metrics'[Valuation (Local)],'Investment Metrics'[Opening Valuation (Local)] - 'Investment Metrics'[Paid-In Capital (Local)])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: 889117df-fd1c-4009-971f-a938a27081fb
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Only visible when there is a single investment currency in the filter context. Distributed capital during the period divided by the paid-in capital during the period plus the opening valuation (i.e. as if the investment(s) were purchased on the minimum date) in the investment currency.
+	measure 'DPI Window (Local)' = DIVIDE('Investment Metrics'[Distributed Capital (Local)],'Investment Metrics'[Opening Valuation (Local)] - 'Investment Metrics'[Paid-In Capital (Local)])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: 32e79388-3928-4638-b756-cc358cc6a94a
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// The gross called amount as of a specific date, not adjusted for recallable distributed amounts, in the reporting currency. The investment currency amount is converted using the latest spot FX rate. For secondary purchases, paid-in capital and gross called may differ.
+	measure 'Gross Called' = HextPoint.PowerBI.HasOneReportingCurrency(HextPoint.PowerBI.ClosingValue(SUM('Investment Metrics'[CumulativeGrossCalledAmount])))
+		displayFolder: Commitment Metrics (Reporting Currency)
+		lineageTag: 19882d77-65d2-4215-bc82-dfaab5699c2c
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// Amount of distributed capital that could be recalled by the fund/investment, in the reporting currency, using the latest spot FX rate.
+	measure Recallable = HextPoint.PowerBI.HasOneReportingCurrency(HextPoint.PowerBI.ClosingValue(SUM('Investment Metrics'[CumulativeRecallableAmount])))
+		displayFolder: Commitment Metrics (Reporting Currency)
+		lineageTag: e252e423-379d-4f50-9ff8-bf38e665e7e6
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// Net called equals gross called minus recallable distributed amounts, in the reporting currency.
+	measure 'Net Called' = 'Investment Metrics'[Gross Called] - 'Investment Metrics'[Recallable]
+		displayFolder: Commitment Metrics (Reporting Currency)
+		lineageTag: 1052e996-9681-4fc2-8e85-e5a4b1b319e6
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// Outstanding commitment equals total commitment minus net called amount, in the reporting currency.
+	measure 'Outstanding Commitment' = 'Investment Metrics'[Commitment] - 'Investment Metrics'[Net Called]
+		displayFolder: Commitment Metrics (Reporting Currency)
+		lineageTag: 7fb2b55c-0b93-48d7-b5dc-810b49d09c41
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// Only visible when there is a single investment currency in the filter context. The current commitment amount in the investment currency.
+	measure 'Commitment (Local)' = HextPoint.PowerBI.InvestmentCurrencyMeasureAllSelectedDatesCheck( HextPoint.PowerBI.ClosingValue( SUM('Investment Metrics'[CurrentCommitmentAmount])))
+		displayFolder: Commitment Metrics (Investment Currency)
+		lineageTag: 31461e40-8c72-4f63-8b4b-69177da661f9
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// Only visible when there is a single investment currency in the filter context. The gross called (local) is the amount called as of a certain date without adjusting for recallable distributed amounts in the investment currency. If the investment is secondary purchase then the paid-in capital amount and gross called can differ.
+	measure 'Gross Called (Local)' = HextPoint.PowerBI.InvestmentCurrencyMeasureAllSelectedDatesCheck( HextPoint.PowerBI.ClosingValue( SUM('Investment Metrics'[CumulativeGrossCalledAmount])))
+		displayFolder: Commitment Metrics (Investment Currency)
+		lineageTag: 7b67a114-5f46-4249-b834-3a559aaf34da
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// Only visible when there is a single investment currency in the filter context. The amount of distributed capital which could later be recalled by the fund/investment in the investment currency
+	measure 'Recallable (Local)' = HextPoint.PowerBI.InvestmentCurrencyMeasureAllSelectedDatesCheck( HextPoint.PowerBI.ClosingValue(SUM('Investment Metrics'[CumulativeRecallableAmount])))
+		displayFolder: Commitment Metrics (Investment Currency)
+		lineageTag: 720ac46b-aa1e-422b-bf77-58259869ae93
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// Only visible when there is a single investment currency in the filter context. The net called is the gross called less the recallable distributed amounts in the investment currency.
+	measure 'Net Called (Local)' = [Gross Called (Local)] - [Recallable (Local)]
+		displayFolder: Commitment Metrics (Investment Currency)
+		lineageTag: 73208791-d548-45dc-80ec-997eb87f7b1c
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// Only visible when there is a single investment currency in the filter context. The commitment less the net called amount in the investment currency.
+	measure 'Outstanding Commitment (Local)' = [Commitment (Local)] - [Net Called (Local)]
+		displayFolder: Commitment Metrics (Investment Currency)
+		lineageTag: 0f648c43-4a03-40c0-ab44-09459b02e6f2
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// For use in visuals with the date in a column/row/axis. The cumulative total P&L in the reporting currency between the minimum date and up to the current date in the visual.
+	measure 'Cumulative Total P&L' = HextPoint.PowerBI.CumulativeToDate([Total P&L])
+		displayFolder: P&L Metrics (Reporting Currency)
+		lineageTag: f97ce023-058b-4b3a-8b64-d83758600752
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// For use in visuals with the date in a column/row/axis. The cumulative P&L attributable to changes in price/valuation between the minimum date and the current date in the visual.
+	measure 'Cumulative Price P&L' = HextPoint.PowerBI.CumulativeToDate([Price P&L])
+		displayFolder: P&L Metrics (Reporting Currency)
+		lineageTag: eafcf554-55a8-4bcc-8310-08dc466b577e
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// For use in visuals with the date in a column/row/axis. The cumulative FX & Cross P&L is the sum of the FX P&L and the Cross P&L between the minimum date and up to the current date in the visual in the reporting currency.
+	measure 'Cumulative FX & Cross P&L' = HextPoint.PowerBI.CumulativeToDate([FX & Cross P&L])
+		displayFolder: P&L Metrics (Reporting Currency)
+		lineageTag: 7bb0c32e-2bbe-479d-a3aa-7bb9da1f8ecf
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// For use in visuals with the date in a column/row/axis. The cumulative FX P&L between the minimum date and up to the current date in the visual in the reporting currency. The "on-market" method is used for FX P&L attribution.
+	measure 'Cumulative FX P&L' = HextPoint.PowerBI.CumulativeToDate([FX P&L])
+		displayFolder: P&L Metrics (Reporting Currency)
+		lineageTag: 74b7994e-879d-4caa-b7e4-8ef2e8be0b81
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// Number of investments as of the maximum date in the filter context.
+	measure 'Open Investments' = HextPoint.PowerBI.ClosingValue(DISTINCTCOUNT('Investment Metrics'[InvestmentKey]))
+		formatString: 0
+		displayFolder: Counts & Other Metrics
+		lineageTag: 42248957-dbd0-4f03-a301-8bc61693a7b4
+
+	/// The date of the first commitment. If multiple investments are present in the filter context, returns the earliest commitment date. This measure ignores date filters and may return dates prior to the selected minimum date.
+	measure 'First Commitment Date' = HextPoint.PowerBI.InceptionToDate(CALCULATE(MIN('Investment Metrics'[Date]),'Investment Metrics'[CurrentCommitmentAmount] <> 0))
+		formatString: dd/mm/yy
+		displayFolder: Counts & Other Metrics
+		lineageTag: ad7e46e3-a33b-4eba-abe7-509be8027dcc
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	/// For use in visuals with the date in a column/row/axis. Internal rate of return in the investment currency between the minimum date and the current date in the visual.
+	measure 'IRR TD' = HextPoint.PowerBI.CumulativeToDate([IRR])
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: e1000ce6-56aa-4a92-817a-71dfc597bfb7
+
+	/// The percentage of the committed amount that has been called.
+	measure '% Called' = DIVIDE([Net Called],[Commitment])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Commitment Metrics (Reporting Currency)
+		lineageTag: ad5bbc6d-ed40-4307-b553-027a88904b2a
+
+	/// The percentage of the committed amount that remains available to be called.
+	measure '% Outstanding' = DIVIDE([Outstanding Commitment],[Commitment])
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Commitment Metrics (Reporting Currency)
+		lineageTag: 63ac39e5-1998-4b49-9f29-5638f5a9f29f
+
+	/// For use in visuals with the date in a column/row/axis. The residual value (i.e. current valuation) plus the distributed capital divided by the paid-in capital between the minimum date and the current date in visual plus the opening valuation (i.e. as if the investment(s) were purchased on the minimum date) in the reporting currency.
+	measure 'TVPI TD' = HextPoint.PowerBI.CumulativeToDate([TVPI Window])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: 73f08be5-1fc3-49f1-ac8a-a8fb84d595b2
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// For use in visuals with the date in a column/row/axis. Cross P&L in the reporting currency since the minimum date which is the residual P&L caused by the change in valuation (Price) and FX rate changes. E.g. 10% change in Price and 10% change in FX rate leads to 21% change increase so the cross P&L corresponds to a 1% change.
+	/// 
+	measure 'Cumulative Cross P&L' = HextPoint.PowerBI.CumulativeToDate([Cross P&L])
+		displayFolder: P&L Metrics (Reporting Currency)
+		lineageTag: d476d38a-d6e5-4b02-8a46-3bd67e1033dc
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// The P&L attributable to changes in price/valuation since inception.
+	measure 'Price P&L ITD' = HextPoint.PowerBI.InceptionToDate([Price P&L])
+		displayFolder: P&L Metrics (Reporting Currency)
+		lineageTag: 120c34f5-9a3a-4d07-9210-4925b4a560cf
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// The FX & Cross P&L ITD is the sum of the FX P&L and the Cross P&L since inception.
+	measure 'FX & Cross P&L ITD' = HextPoint.PowerBI.InceptionToDate([FX & Cross P&L])
+		displayFolder: P&L Metrics (Reporting Currency)
+		lineageTag: bde4990e-79f7-4882-a63e-e0503d68a5e0
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// The P&L attributable to changes in FX rates between the investment currency and reporting currency since inception. The "on-market" method is used for FX P&L attribution.
+	measure 'FX P&L ITD' = HextPoint.PowerBI.InceptionToDate([FX P&L])
+		displayFolder: P&L Metrics (Reporting Currency)
+		lineageTag: eff82224-a2e8-4830-a04c-4ef8ab776f96
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// Cross P&L in the reporting currency since inception which is the residual P&L caused by the change in valuation (Price) and FX rate changes. E.g. 10% change in Price and 10% change in FX rate leads to 21% change increase so the cross P&L corresponds to a 1% change.
+	measure 'Cross P&L ITD' = HextPoint.PowerBI.InceptionToDate([Cross P&L])
+		displayFolder: P&L Metrics (Reporting Currency)
+		lineageTag: 3c864938-e973-439b-873f-7fe5baf521c0
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// Only visible when there is a single investment currency in the filter context. The P&L in the investment currency since inception.
+	measure 'P&L ITD (Local)' = HextPoint.PowerBI.InceptionToDate([P&L (Local)])
+		displayFolder: P&L Metrics (Investment Currency)
+		lineageTag: 3bcbc0ac-404d-4b5a-80b0-df1bbbf2f53a
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// Only visible when there is a single investment currency in the filter context. For use in visuals with the date in a column/row/axis. The P&L in the investment currency since the minimum date selected.
+	measure 'Cumulative P&L (Local)' = HextPoint.PowerBI.CumulativeToDate([P&L (Local)])
+		displayFolder: P&L Metrics (Investment Currency)
+		lineageTag: 1ae838ea-92cf-4676-8c17-939e0d445634
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// Used on the Investment Analytics page. Indicates the number of portfolios containing the investment, based on the filter context.
+	measure 'Portfolio Count' = DISTINCTCOUNT('Investment Metrics'[PortfolioKey])
+		formatString: 0
+		displayFolder: Counts & Other Metrics
+		lineageTag: dcc6d707-3a84-4a67-8ede-caf490f3521b
+
+	/// Only visible when there is a single investment currency in the filter context. For use in visuals with the date in a column/row/axis. Internal rate of return in the reporting currency between the minimum date and the current date in the visual.
+	measure 'IRR TD (Local)' = HextPoint.PowerBI.CumulativeToDate([IRR (Local)])
+		formatString: 0.00%;-0.00%;0.00%
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: 77f987f5-7449-4a3f-974e-175058bc49ad
+
+	/// Only visible when there is a single investment currency in the filter context. For use in visuals with the date in a column/row/axis. The residual value (i.e. current valuation) plus the distributed capital divided by the paid-in capital between the minimum date and the current date in visual plus the opening valuation (i.e. as if the investment(s) were purchased on the minimum date) in the investment currency.
+	measure 'TVPI TD (Local)' = HextPoint.PowerBI.CumulativeToDate([TVPI (Local)])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: 2bc06fb7-bd2a-41fb-83e6-3c2c40cea32d
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Only visible when there is a single investment currency in the filter context. For use in visuals with the date in a column/row/axis. Distributed capital divided by the paid-in capital plus the opening valuation (i.e. as if the investment(s) were purchased on the minimum date) between the minimum date and the current date in visual in the investment currency.
+	measure 'DPI TD (Local)' = HextPoint.PowerBI.CumulativeToDate([DPI Window (Local)])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: b5a3b0ac-0b98-43bf-9344-52cf12053554
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// For use in visuals with the date in a column/row/axis. Distributed capital divided by the paid-in capital plus the opening valuation (i.e. as if the investment(s) were purchased on the minimum date) between the minimum date and the current date in visual in the reporting currency.
+	measure 'DPI TD' = HextPoint.PowerBI.CumulativeToDate([DPI Window])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: 460e9453-b384-4bf9-9dad-cdba28e54add
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// Only visible when there is a single investment currency in the filter context. For use in visuals with the date in a column/row/axis. The residual value (i.e. current valuation) divided by the paid-in capital between the minimum date and the current date in visual plus the opening valuation (i.e. as if the investment(s) were purchased on the minimum date) in the investment currency.
+	measure 'RVPI TD (Local)' = HextPoint.PowerBI.CumulativeToDate([RVPI Window (Local)])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: 8d499b09-2f82-4af8-a6e8-3e5957450593
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// For use in visuals with the date in a column/row/axis. The residual value (i.e. current valuation) divided by the paid-in capital between the minimum date and the current date in visual plus the opening valuation (i.e. as if the investment(s) were purchased on the minimum date) in the reporting currency.
+	measure 'RVPI TD' = HextPoint.PowerBI.CumulativeToDate([RVPI Window])
+		formatString: #,0.00\x;-#,0.00\x;#,0.00\x
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: 21fe85cb-634f-422d-89df-5f2ac78e9e2f
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	/// This measure is used exclusively on the Investment Analytics page. It dynamically switches between investment currency, reporting currency, cumulative (from min date to current date), and inception-to-date versions of cash flow metrics, depending on slicer selections.
+	measure 'Cash Flow (I)TD 📈' =
+			
+			
+			VAR MetricPeriod = SELECTEDVALUE('Metric Selection'[Metric Period])
+			VAR MetricCurrency = SELECTEDVALUE('Metric Selection'[Metric Currency])
+			
+			VAR Result =
+			
+			SWITCH(
+			    TRUE,
+			    MetricPeriod = "Cumulative" && MetricCurrency = "Investment Currency", [Cumulative Cash Flow (Local)],
+			    MetricPeriod = "Periodic" && MetricCurrency = "Investment Currency", [Cumulative Cash Flow (Local)],
+			    MetricPeriod = "Cumulative" && MetricCurrency = "Reporting Currency", [Cumulative Cash Flow],
+			    MetricPeriod = "Periodic" && MetricCurrency = "Reporting Currency", [Cumulative Cash Flow],
+			    MetricPeriod = "ITD" && MetricCurrency = "Investment Currency", [Cash Flow ITD (Local)],
+			    MetricPeriod = "ITD" && MetricCurrency = "Reporting Currency", [Cash Flow ITD],
+			    BLANK()
+			)
+			
+			RETURN Result
+		displayFolder: Counts & Other Metrics
+		lineageTag: e9523652-ed7f-43b3-b7ff-92a06b7f0817
+
+		formatStringDefinition = IF(SELECTEDVALUE('Metric Selection'[Metric Currency]) = "Investment Currency",HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat(),SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0"))
+
+	/// The measure has been created exclusively for use on the Investment Analytics page. It will automatically switch between the investment currency and reporting currency versions of the cash flow metric depending on the selection made in the slicer pane.
+	measure 'Cash Flow 📈' = IF(SELECTEDVALUE('Metric Selection'[Metric Currency]) = "Investment Currency", [Cash Flow (Local)], [Cash Flow])
+		displayFolder: Counts & Other Metrics
+		lineageTag: 9de5126d-e365-49c2-9a13-cc82abb0391a
+
+		formatStringDefinition = IF(SELECTEDVALUE('Metric Selection'[Metric Currency]) = "Investment Currency",HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat(),SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0"))
+
+	/// Only visible when there is a single investment currency in the filter context. For use in visuals with the date in a column/row/axis. The distributed capital since the minimum date in the investment currency.
+	measure 'Cumulative Distributed Capital (Local)' = HextPoint.PowerBI.CumulativeToDate([Distributed Capital (Local)])
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: c4d7bb84-56e4-4214-9908-61a9bf6fafa4
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// Only visible when there is a single investment currency in the filter context. The net cash flow since inception in the investment currency.
+	measure 'Cash Flow ITD (Local)' = HextPoint.PowerBI.InceptionToDate([Cash Flow (Local)])
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: ed20a468-d9b0-46bc-a875-27ac8ec13916
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// The net cash flow since inception in the reporting currency. The spot FX rate on each date of a cash flow is used for currency conversion.
+	measure 'Cash Flow ITD' = HextPoint.PowerBI.InceptionToDate([Cash Flow])
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: b854edd3-8dd0-40d4-8821-f4eda7f1e121
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// Only visible when there is a single investment currency in the filter context. For use in visuals with the date in a column/row/axis. The amount of paid-in capital in the investment currency between the minimum date and the current date in the visual.
+	measure 'Cumulative Paid-In Capital (Local)' = HextPoint.PowerBI.CumulativeToDate([Paid-In Capital (Local)])
+		displayFolder: Cash Flow Metrics (Investment Currency)
+		lineageTag: 42279771-0239-462f-9572-84142e5bec05
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	/// For use in visuals with the date in a column/row/axis. The amount of paid-in capital in the reporting currency between the minimum date and the current date in the visual. Transaction amounts are converted using the latest available spot FX rate on each individual transaction date.
+	measure 'Cumulative Paid-In Capital' = HextPoint.PowerBI.CumulativeToDate([Paid-In Capital])
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: 92549373-d225-4e28-89a3-03b271ed4c71
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// For use in visuals with the date in a column/row/axis. The distributed capital since the minimum date in the reporting currency.
+	measure 'Cumulative Distributed Capital' = HextPoint.PowerBI.CumulativeToDate([Distributed Capital])
+		displayFolder: Cash Flow Metrics (Reporting Currency)
+		lineageTag: ee15ed1b-1441-4aad-83d2-915dd755b524
+
+		formatStringDefinition = SELECTEDVALUE('Reporting Currencies'[Currency format string],"#,0;(#,0);#,0")
+
+	/// The amount committed between the minimum and maximum date during the period. If a commitment has ended because of investment/fund liquidation and a negative commitment transaction has been entered then this amount could be negative.
+	measure 'Committed (Local)' = HextPoint.PowerBI.InvestmentCurrencyMeasure(SUM('Investment Metrics'[DailyCommitmentAmount]))
+		displayFolder: Commitment Metrics (Investment Currency)
+		lineageTag: 984ec9c3-b08d-4f99-a61d-095840e2fc48
+
+		formatStringDefinition = HextPoint.PowerBI.InvestmentMetricInvestmentCurrencyFormat()
+
+	column PortfolioKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 69a4646d-4f00-4b44-9ed5-0d716a2254aa
+		summarizeBy: none
+		sourceColumn: PortfolioKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvestmentKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e788cb21-d2df-413d-9c49-a976111284d3
+		summarizeBy: none
+		sourceColumn: InvestmentKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrentCommitmentAmount =
+			
+			
+			VAR InvestmentKey = 'Investment Metrics'[InvestmentKey]
+			VAR PortfolioKey = 'Investment Metrics'[PortfolioKey]
+			VAR CurrentDate = 'Investment Metrics'[Date]
+			
+			VAR CurrentLocalCommitmentAmount =CALCULATE(
+			    SUMX('Commitments','Commitments'[Amount]),
+			    ALL('Dates'),
+			    'Commitments'[InvestmentKey] = InvestmentKey
+			    && 'Commitments'[PortfolioKey] = PortfolioKey
+			    && 'Commitments'[Date] <= CurrentDate
+			)
+			
+			VAR FXRate = 'Investment Metrics'[FXRate]
+			
+			VAR Result = IF(OR(CurrentLocalCommitmentAmount = 0,ISBLANK(CurrentLocalCommitmentAmount)),0,DIVIDE(CurrentLocalCommitmentAmount, FXRate))
+			
+			RETURN Result
+		isHidden
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 5cdba308-81ff-4aed-a97d-848579514db5
+		summarizeBy: sum
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrentValuationAmount = ```
+			
+			
+			VAR InvestmentKey = 'Investment Metrics'[InvestmentKey]
+			VAR PortfolioKey = 'Investment Metrics'[PortfolioKey]
+			VAR CurrentDate = 'Investment Metrics'[Date]
+			
+			VAR LatestValuationDate = CALCULATE(
+			        LASTDATE('Valuations'[Date]),
+			        'Valuations'[InvestmentKey] = InvestmentKey
+			        && 'Valuations'[PortfolioKey] = PortfolioKey
+			        && 'Valuations'[Date] <= CurrentDate
+			        )
+			
+			VAR LatestValuationAmount = IF(
+			        NOT(ISBLANK(LatestValuationDate)),
+			            CALCULATE(
+			            AVERAGE('Valuations'[Amount]),
+			            'Valuations'[InvestmentKey] = InvestmentKey
+			            && 'Valuations'[PortfolioKey] = PortfolioKey
+			            && 'Valuations'[Date] = LatestValuationDate
+			            ),
+			            0
+			    )
+			
+			VAR TransactionAmountSinceValuation = IF(
+			        NOT(ISBLANK(LatestValuationDate)),
+			            CALCULATE(
+			                SUM('Transactions'[CashFlowAmount]),
+			                ALL('Dates'),
+			                'Transactions'[InvestmentKey] = InvestmentKey
+			                && 'Transactions'[PortfolioKey] = PortfolioKey
+			                && 'Transactions'[Date] > LatestValuationDate
+			                && 'Transactions'[Date] <= CurrentDate
+			            ),
+			            CALCULATE(
+			                SUM('Transactions'[CashFlowAmount]),
+			                ALL('Dates'),
+			                'Transactions'[InvestmentKey] = InvestmentKey
+			                && 'Transactions'[PortfolioKey] = PortfolioKey
+			                && 'Transactions'[Date] <= CurrentDate
+			            )
+			    )
+			
+			    VAR TransactionAmountSinceValuationNonBlank = IF(ISBLANK(TransactionAmountSinceValuation),0,TransactionAmountSinceValuation)
+			    
+			    VAR CurrentValuationAmount = LatestValuationAmount - TransactionAmountSinceValuationNonBlank
+			
+			    VAR FXRate = 'Investment Metrics'[FXRate]
+			
+			    VAR Result = DIVIDE(CurrentValuationAmount, FXRate)
+			    
+			    RETURN Result
+			    
+			```
+		isHidden
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 1d9a35e1-5f91-43c0-8953-dfd7d09a3917
+		summarizeBy: none
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column CumulativeGrossCalledAmount = ```
+			
+			
+			VAR InvestmentKey = 'Investment Metrics'[InvestmentKey]
+			VAR PortfolioKey = 'Investment Metrics'[PortfolioKey]
+			VAR CurrentDate = 'Investment Metrics'[Date]
+			
+			VAR GrossCalledInLocal =CALCULATE(
+			    SUM('Transactions'[ContributionToCommitmentAmount]),
+			    ALL('Dates'),
+			    'Transactions'[InvestmentKey] = InvestmentKey 
+			    &&'Transactions'[PortfolioKey] = PortfolioKey
+			    && 'Transactions'[Date] <= CurrentDate
+			)
+			
+			VAR FXRate = 'Investment Metrics'[FXRate]
+			
+			VAR CurrentCommitmentAmount = 'Investment Metrics'[CurrentCommitmentAmount]
+			
+			VAR Result = IF(OR(OR(CurrentCommitmentAmount = 0,ISBLANK(GrossCalledInLocal)),GrossCalledInLocal = 0), 0, DIVIDE(GrossCalledInLocal, FXRate))
+			
+			RETURN Result
+			```
+		isHidden
+		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		lineageTag: 08818677-84f9-45fd-89fb-e1e8d48a1324
+		summarizeBy: sum
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column CurrencyKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e8cc4949-d8f2-4c27-a73f-479eb38c26a2
+		summarizeBy: none
+		sourceColumn: CurrencyKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column Date
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: 1e65d73f-d8ea-4aca-b7c5-b0fd2a82ebac
+		summarizeBy: none
+		sourceColumn: Date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column InvestmentCurrencyKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1ba5c763-2f77-4308-a11f-587ddeae012f
+		summarizeBy: none
+		sourceColumn: InvestmentCurrencyKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsLocalCurrency
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 5abc887a-bdd2-46e6-9bc3-a3939261695d
+		summarizeBy: none
+		sourceColumn: IsLocalCurrency
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column FXRate = ```
+			
+			
+			VAR TargetCurrency = 'Investment Metrics'[CurrencyKey]
+			VAR InvestmentCurrency = 'Investment Metrics'[InvestmentCurrencyKey]
+			VAR CurrentDate = 'Investment Metrics'[Date]
+			VAR BaseCurrency = CALCULATE(
+			    FIRSTNONBLANK('Currencies'[CurrencyKey],'Currencies'[CurrencyKey]),
+			    'Currencies'[IsBaseCurrency] = TRUE
+			)
+			
+			VAR LatestTargetFXDate = CALCULATE(
+			    LASTDATE('FX Rates'[Date]),
+			    'FX Rates'[CurrencyKey] = TargetCurrency
+			    && 'FX Rates'[Date] <= CurrentDate
+			)
+			
+			VAR LatestInvestmentFXDate = CALCULATE(
+			    LASTDATE('FX Rates'[Date]),
+			    'FX Rates'[CurrencyKey] = InvestmentCurrency
+			    && 'FX Rates'[Date] <= CurrentDate
+			)
+			
+			VAR TargetToBase = IF(
+			    BaseCurrency = TargetCurrency,
+			    1,
+			    CALCULATE(
+			        AVERAGE('FX Rates'[Rate]),
+			        'FX Rates'[CurrencyKey] = TargetCurrency
+			        && 'FX Rates'[Date] = LatestTargetFXDate
+			    )
+			)
+			
+			VAR InvestmentToBase = IF(
+			    BaseCurrency = InvestmentCurrency,
+			    1,
+			     CALCULATE(
+			        AVERAGE('FX Rates'[Rate]),
+			        'FX Rates'[CurrencyKey] = InvestmentCurrency
+			        && 'FX Rates'[Date] = LatestInvestmentFXDate
+			    )
+			)
+			
+			VAR Result = IF(InvestmentCurrency = TargetCurrency, 1, DIVIDE(InvestmentToBase,TargetToBase))
+			
+			RETURN Result
+			
+			
+			```
+		isHidden
+		lineageTag: 355722ba-0d5c-4e4d-8f14-e87fd31fee5c
+		summarizeBy: none
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CumulativeRecallableAmount = ```
+			
+			
+			VAR InvestmentKey = 'Investment Metrics'[InvestmentKey]
+			VAR PortfolioKey = 'Investment Metrics'[PortfolioKey]
+			VAR CurrentDate = 'Investment Metrics'[Date]
+			
+			VAR RecallableInLocal =CALCULATE(
+			    SUMX('Transactions','Transactions'[RecallableAmount]),
+			    ALL('Dates'),
+			   'Transactions'[Recallable] = true 
+			   && 'Transactions'[InvestmentKey] = InvestmentKey
+			   && 'Transactions'[PortfolioKey] = PortfolioKey
+			   && 'Transactions'[Date] <= CurrentDate
+			)
+			
+			VAR FXRate = 'Investment Metrics'[FXRate]
+			
+			VAR AdjRecallableInLocal = IF(ISBLANK(RecallableInLocal),0,DIVIDE(RecallableInLocal, FXRate))
+			
+			VAR CurrentCommitment = 'Investment Metrics'[CurrentCommitmentAmount]
+			
+			VAR Result = IF(CurrentCommitment = 0, 0, AdjRecallableInLocal)
+			
+			RETURN Result
+			```
+		isHidden
+		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		lineageTag: 691c6b2e-e8f4-4cca-b953-33a851753125
+		summarizeBy: sum
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column ManagerKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: c779e855-4814-42f6-b8f2-e3daef39e8c8
+		summarizeBy: none
+		sourceColumn: ManagerKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column StrategyKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e94b8a97-c2a9-46b7-b098-4bb2fb966472
+		summarizeBy: none
+		sourceColumn: StrategyKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column RegionKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 31f4f56f-5d4f-431f-a96f-b5eeca7e12fa
+		summarizeBy: none
+		sourceColumn: RegionKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column DailyNetCashFlow = 'Investment Metrics'[DailyDistributedAmount] - 'Investment Metrics'[DailyPaidInAmount]
+		isHidden
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 07d50825-e979-4516-ad26-b2ec26646028
+		summarizeBy: sum
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column DailyCommitmentAmount =
+			
+			
+			VAR InvestmentKey = 'Investment Metrics'[InvestmentKey]
+			VAR PortfolioKey = 'Investment Metrics'[PortfolioKey]
+			VAR CurrentDate = 'Investment Metrics'[Date]
+			
+			VAR DailyCommitmentAmountInLocal =CALCULATE(
+			    SUM('Commitments'[Amount]),
+			    'Commitments'[InvestmentKey] = InvestmentKey
+			    && 'Commitments'[PortfolioKey] = PortfolioKey
+			    && 'Commitments'[Date] = CurrentDate
+			)
+			
+			VAR FXRate = 'Investment Metrics'[FXRate]
+			
+			VAR Result = IF(OR(DailyCommitmentAmountInLocal = 0,ISBLANK(DailyCommitmentAmountInLocal)), 0, DIVIDE(DailyCommitmentAmountInLocal, FXRate))
+			
+			RETURN Result
+		isHidden
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: d1873572-456f-4b56-b617-9b86279e4df6
+		summarizeBy: sum
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column AssetClassKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6432d138-7467-4edc-913b-b7f857f3fe9c
+		summarizeBy: none
+		sourceColumn: AssetClassKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column DailyPaidInAmount =
+			
+			
+			VAR InvestmentKey = 'Investment Metrics'[InvestmentKey]
+			VAR PortfolioKey = 'Investment Metrics'[PortfolioKey]
+			VAR CurrentDate = 'Investment Metrics'[Date]
+			
+			VAR DailyPaidInAmountInLocal =CALCULATE(
+			    - SUM('Transactions'[CashFlowAmount]),
+			    'Transactions'[Is Contribution] = TRUE
+			    && 'Transactions'[InvestmentKey] = InvestmentKey
+			    && 'Transactions'[PortfolioKey] = PortfolioKey
+			    && 'Transactions'[Date] = CurrentDate
+			)
+			
+			VAR FXRate = 'Investment Metrics'[FXRate]
+			
+			VAR Result = IF(OR(DailyPaidInAmountInLocal = 0,ISBLANK(DailyPaidInAmountInLocal)), 0, DIVIDE(DailyPaidInAmountInLocal, FXRate))
+			
+			RETURN Result
+		isHidden
+		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		lineageTag: c3d8d766-9081-4e33-99ab-00272fc801b6
+		summarizeBy: sum
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column DailyDistributedAmount =
+			
+			
+			VAR InvestmentKey = 'Investment Metrics'[InvestmentKey]
+			VAR PortfolioKey = 'Investment Metrics'[PortfolioKey]
+			VAR CurrentDate = 'Investment Metrics'[Date]
+			
+			VAR DailyDistrubutedAmountInLocal =CALCULATE(
+			    SUM('Transactions'[CashFlowAmount]),
+			    'Transactions'[Is Contribution] = FALSE
+			    && 'Transactions'[InvestmentKey] = InvestmentKey
+			    && 'Transactions'[PortfolioKey] = PortfolioKey
+			    && 'Transactions'[Date] = CurrentDate
+			)
+			
+			VAR FXRate = 'Investment Metrics'[FXRate]
+			
+			VAR Result = IF(OR(DailyDistrubutedAmountInLocal = 0,ISBLANK(DailyDistrubutedAmountInLocal)), 0, DIVIDE(DailyDistrubutedAmountInLocal, FXRate))
+			
+			RETURN Result
+		isHidden
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: d96ca430-827f-48fb-a159-2b6fb9e932ec
+		summarizeBy: sum
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column PriorValuationAmount = ```
+			
+			
+			VAR InvestmentKey = 'Investment Metrics'[InvestmentKey]
+			VAR PortfolioKey   = 'Investment Metrics'[PortfolioKey]
+			VAR CurrencyKey   = 'Investment Metrics'[CurrencyKey]
+			VAR PriorDate = DATEADD('Investment Metrics'[Date],-1,DAY)
+			
+			VAR PriorValuation = 
+			    CALCULATE(
+			        AVERAGE('Investment Metrics'[CurrentValuationAmount]),
+			        REMOVEFILTERS('Investment Metrics'),
+			        ALL('Dates'),
+			        'Investment Metrics'[InvestmentKey] = InvestmentKey
+			        && 'Investment Metrics'[PortfolioKey] = PortfolioKey
+			        && 'Investment Metrics'[CurrencyKey] = CurrencyKey
+			        && 'Investment Metrics'[Date] = PriorDate
+			    )
+			
+			VAR Result = COALESCE(PriorValuation,0)
+			
+			RETURN Result
+			```
+		isHidden
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 5b2a655c-aa5b-4610-bbb5-a7321c0da1ca
+		summarizeBy: none
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column FXPnLAmount = ```
+			
+			
+			VAR InvestmentKey = 'Investment Metrics'[InvestmentKey]
+			VAR PortfolioKey   = 'Investment Metrics'[PortfolioKey]
+			VAR PriorDate = DATEADD('Investment Metrics'[Date],-1,DAY)
+			
+			VAR PriorValuationLocal = 
+			    CALCULATE(
+			        AVERAGE('Investment Metrics'[CurrentValuationAmount]),
+			        REMOVEFILTERS('Investment Metrics'),
+			        'Investment Metrics'[InvestmentKey] = InvestmentKey
+			        && 'Investment Metrics'[PortfolioKey] = PortfolioKey
+			        && 'Investment Metrics'[IsLocalCurrency]  = TRUE
+			        && 'Investment Metrics'[Date] = PriorDate
+			    )
+			    
+			VAR FXPnLAmountCalc = DIVIDE(PriorValuationLocal,'Investment Metrics'[FXRate]) - 'Investment Metrics'[PriorValuationAmount] 
+			
+			VAR Result = IF('Investment Metrics'[IsLocalCurrency],0,FXPnLAmountCalc)
+			
+			RETURN Result
+			```
+		isHidden
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: 8f60da6d-122e-419d-8b75-47273f28c121
+		summarizeBy: none
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column CrossPnLAmount = 'Investment Metrics'[CurrentValuationAmount] - 'Investment Metrics'[PriorValuationAmount] + 'Investment Metrics'[DailyNetCashFlow] - 'Investment Metrics'[FXPnLAmount] - 'Investment Metrics'[PricePnLAmount]
+		isHidden
+		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		lineageTag: ec2f93c3-9909-49a7-9930-2f46ade10a2e
+		summarizeBy: sum
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column PricePnLAmount =
+			
+			
+			VAR InvestmentKey = 'Investment Metrics'[InvestmentKey]
+			VAR PortfolioKey   = 'Investment Metrics'[PortfolioKey]
+			VAR CurrentDate = 'Investment Metrics'[Date]
+			
+			VAR TotalPnLInLocal =
+			     CALCULATE(
+			        SUMX('Investment Metrics','Investment Metrics'[CurrentValuationAmount] - 'Investment Metrics'[PriorValuationAmount] + 'Investment Metrics'[DailyNetCashFlow]),
+			        REMOVEFILTERS('Investment Metrics'),
+			        'Investment Metrics'[InvestmentKey] = InvestmentKey
+			        && 'Investment Metrics'[PortfolioKey] = PortfolioKey
+			        && 'Investment Metrics'[IsLocalCurrency]  = TRUE
+			        && 'Investment Metrics'[Date] = CurrentDate
+			    )
+			
+			VAR TotalPnl = 'Investment Metrics'[CurrentValuationAmount] - 'Investment Metrics'[PriorValuationAmount] + 'Investment Metrics'[DailyNetCashFlow]
+			
+			VAR PricePnLCalc = DIVIDE(TotalPnLInLocal,COALESCE('Investment Metrics'[PriorFXRate],'Investment Metrics'[FXRate]))
+			
+			VAR Result = IF('Investment Metrics'[IsLocalCurrency],TotalPnl,PricePnLCalc)
+			
+			RETURN Result
+		isHidden
+		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		lineageTag: 0d156f63-fd04-43b2-8f2f-4fd69f45a068
+		summarizeBy: sum
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column PriorFXRate = ```
+			
+			
+			VAR InvestmentKey = 'Investment Metrics'[InvestmentKey]
+			VAR PortfolioKey   = 'Investment Metrics'[PortfolioKey]
+			VAR CurrencyKey   = 'Investment Metrics'[CurrencyKey]
+			VAR PriorDate = DATEADD('Investment Metrics'[Date],-1,DAY)
+			
+			VAR PriorRate = 
+			    CALCULATE(
+			        AVERAGE('Investment Metrics'[FXRate]),
+			        REMOVEFILTERS('Investment Metrics'),
+			        ALL('Dates'),
+			        'Investment Metrics'[InvestmentKey] = InvestmentKey
+			        && 'Investment Metrics'[PortfolioKey] = PortfolioKey
+			        && 'Investment Metrics'[CurrencyKey] = CurrencyKey
+			        && 'Investment Metrics'[Date] = PriorDate
+			    )
+			
+			RETURN PriorRate
+			```
+		isHidden
+		lineageTag: 2ab79ec9-2181-4950-bd5c-26d45faf6ff0
+		summarizeBy: sum
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition 'Investment Metrics' = m
+		mode: import
+		queryGroup: 'Model tables'
+		source =
+				let
+				    TodayDate = Date.AddDays(DateTime.Date(DateTime.LocalNow()),-1),
+				    Source = Table.Combine({#"Commitment Positions", #"Transaction Positions", #"Valuation Positions"}),
+				    RemovedDuplicatePositions = Table.Distinct(Source),
+				    MergedWithPortfolios = Table.NestedJoin(RemovedDuplicatePositions, {"Portfolio"}, Portfolios, {"Portfolio"}, "Portfolios", JoinKind.LeftOuter),
+				    ExpandedPortfolios = Table.ExpandTableColumn(MergedWithPortfolios, "Portfolios", {"PortfolioKey"}, {"PortfolioKey"}),
+				    MergedWithInvestments = Table.NestedJoin(ExpandedPortfolios, {"Investment"}, Investments, {"Investment"}, "Investments", JoinKind.LeftOuter),
+				    ExpandedInvestments = Table.ExpandTableColumn(MergedWithInvestments, "Investments", {"InvestmentKey", "ManagerKey", "CurrencyKey", "StrategyKey", "RegionKey","AssetClassKey"}, {"InvestmentKey", "ManagerKey", "InvestmentCurrencyKey", "StrategyKey", "RegionKey","AssetClassKey"}),
+				    RemovedStringColumns = Table.RemoveColumns(ExpandedInvestments,{"Portfolio", "Investment"}),
+				    WithCommitmentMinDate = GetMinPosDate("CommitmentMinDate",RemovedStringColumns,Commitments),
+				    WithTransactionMinDate = GetMinPosDate("TransactionMinDate",WithCommitmentMinDate,Transactions),
+				    WithValuationMinDate = GetMinPosDate("ValuationMinDate",WithTransactionMinDate,Valuations),
+				    WithOverallMinDate = Table.AddColumn(WithValuationMinDate,"MinDate", each List.Min({[CommitmentMinDate],[TransactionMinDate],[ValuationMinDate]})),
+				    WithCloseDate = GetMaxPosDate("CloseDate",WithOverallMinDate,Transactions),
+				    WithMaxDate = Table.AddColumn(WithCloseDate,"MaxDate", each if [CloseDate] <> null then [CloseDate] else TodayDate),
+				    WithDateList = Table.AddColumn(WithMaxDate, "Date", each List.Dates([MinDate], Duration.Days([MaxDate] - [MinDate]) + 1,#duration(1,0,0,0))),
+				    ExpandedDateList = Table.ExpandListColumn(WithDateList, "Date"),
+				    ChangedDateType = Table.TransformColumnTypes(ExpandedDateList,{{"Date", type date}}),
+				    RemovedMinMaxDateColumns = Table.RemoveColumns(ChangedDateType,{"CommitmentMinDate", "TransactionMinDate", "ValuationMinDate", "MinDate", "CloseDate", "MaxDate"}),
+				    //AddInvestmentCurrencyKeyColumn = Table.AddColumn(RemovedMinMaxDateColumns,"InvestmentCurrencyKey", each [CurrencyKey]),
+				    AddedReportingCurrencyTable = Table.AddColumn(RemovedMinMaxDateColumns, "ReportingCurrencies", each ReportingCurrenciesForPositionMeasures),
+				    ExpandedReportingCurrencies = Table.ExpandTableColumn(AddedReportingCurrencyTable, "ReportingCurrencies", {"CurrencyKey"}, {"CurrencyKey"}),
+				    ChangedCurrencyKey = Table.TransformColumnTypes(ExpandedReportingCurrencies,{{"CurrencyKey", Int64.Type}}),
+				    LocalCurrencyTable = Table.AddColumn(RemovedMinMaxDateColumns, "CurrencyKey", each [InvestmentCurrencyKey]),
+				    ChangeCurrencyKeyLocal = Table.TransformColumnTypes(LocalCurrencyTable,{{"CurrencyKey", Int64.Type}}),
+				    CombineLocalAndReporting = Table.Combine({ChangeCurrencyKeyLocal,ChangedCurrencyKey}),
+				    RemoveDuplicates = Table.Distinct(CombineLocalAndReporting),
+				    AddIsLocalCurrencyColumn = Table.AddColumn(RemoveDuplicates,"IsLocalCurrency", each if [CurrencyKey] = [InvestmentCurrencyKey] then true else false),
+				    ChangedIsLocalCurrencyType = Table.TransformColumnTypes(AddIsLocalCurrencyColumn,{{"IsLocalCurrency", type logical}})
+				in
+				    ChangedIsLocalCurrencyType
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

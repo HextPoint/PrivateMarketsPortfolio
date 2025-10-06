@@ -1,0 +1,163 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "14ec0c2300604d371224",
+  "position": {
+    "x": 10,
+    "y": 130,
+    "z": 1000,
+    "height": 580,
+    "width": 1260,
+    "tabOrder": 1000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Data Dictionary"
+                    }
+                  },
+                  "Property": "Type"
+                }
+              },
+              "queryRef": "Data Dictionary.Type",
+              "nativeQueryRef": "Type"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Data Dictionary"
+                    }
+                  },
+                  "Property": "Location"
+                }
+              },
+              "queryRef": "Data Dictionary.Location",
+              "nativeQueryRef": "Location"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Data Dictionary"
+                    }
+                  },
+                  "Property": "Name"
+                }
+              },
+              "queryRef": "Data Dictionary.Name",
+              "nativeQueryRef": "Name"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Data Dictionary"
+                    }
+                  },
+                  "Property": "Description"
+                }
+              },
+              "queryRef": "Data Dictionary.Description",
+              "nativeQueryRef": "Description"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Data Dictionary"
+                  }
+                },
+                "Property": "Location"
+              }
+            },
+            "direction": "Ascending"
+          }
+        ]
+      }
+    },
+    "objects": {
+      "columnWidth": [
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "145.3019724020764D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Data Dictionary.Name"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "931.229342883807D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Data Dictionary.Description"
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "5D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

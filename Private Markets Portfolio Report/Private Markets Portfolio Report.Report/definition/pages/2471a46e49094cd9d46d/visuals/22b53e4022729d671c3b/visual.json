@@ -1,0 +1,50 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "22b53e4022729d671c3b",
+  "position": {
+    "x": 339.751836365691,
+    "y": 180,
+    "z": 12500,
+    "height": 299.9444004972313,
+    "width": 299.9444004972313,
+    "tabOrder": 9000
+  },
+  "visual": {
+    "visualType": "image",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "imageUrl": {
+              "expr": {
+                "ResourcePackageItem": {
+                  "PackageName": "RegisteredResources",
+                  "PackageType": 1,
+                  "ItemName": "Commitment_Tooltip4552317023207493.png"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Commitment Tooltip image'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "798874613c6bd6a14729",
+  "howCreated": "InsertVisualButton"
+}

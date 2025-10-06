@@ -1,0 +1,101 @@
+table 'FX Rates'
+	isHidden
+	lineageTag: c6bee28d-6aa9-4724-b4e2-6847bd37bb97
+
+	column Date
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: b0848206-e3fa-4070-b8bb-005aeaa26759
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variation
+			isDefault
+			relationship: 7b96690f-ec19-4e52-9b89-70977a4ff08a
+			defaultHierarchy: LocalDateTable_2210ebf9-e8c9-44f0-922f-913288a91a58.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column CCY
+		dataType: string
+		isHidden
+		lineageTag: ff986d9c-851e-4127-b360-1cb6bf96503e
+		summarizeBy: none
+		sourceColumn: CCY
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Rate
+		dataType: double
+		isHidden
+		lineageTag: 58528a6f-edd9-49bf-84a2-bd980b40aaf3
+		summarizeBy: sum
+		sourceColumn: Rate
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CurrencyKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 41a4dac4-2b78-440a-8043-b62ecfc42528
+		summarizeBy: count
+		sourceColumn: CurrencyKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'FX Rates' = m
+		mode: import
+		queryGroup: 'Model tables'
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents(ExcelFileURL), null, true),
+				    Commitments_Table = Source{[Item="Commitments",Kind="Table"]}[Data],
+				    CommitmentDates = Table.SelectColumns(Commitments_Table,{"Date"}),
+				    Transactions_Table = Source{[Item="Transactions",Kind="Table"]}[Data],
+				    TransactionDates = Table.SelectColumns(Transactions_Table,{"Date"}),
+				    Valuations_Table = Source{[Item="Valuations",Kind="Table"]}[Data],
+				    ValuationDates = Table.SelectColumns(Valuations_Table,{"Date"}),
+				    CombineDates = Table.Combine({CommitmentDates,TransactionDates,ValuationDates}),
+				    ChangeDateType = Table.TransformColumnTypes(CombineDates,{{"Date", type date}}),
+				    MinDate = Record.Field(Table.Min(ChangeDateType,"Date"),"Date"),
+				    StartDateFormated = Date.ToText(MinDate,[Format = "YYYY-MM-DD"]),
+				    Investments_Table = Source{[Item="Investments",Kind="Table"]}[Data],
+				    InvestmentCurrencies = Table.SelectRows(Table.Distinct(Table.SelectColumns(Investments_Table, {"CCY"})), each [CCY] <> BaseCurrency),
+				    Currency_Table = Source{[Item="Currencies",Kind="Table"]}[Data],
+				    ChangedCurrencyTableTypes = Table.TransformColumnTypes(Currency_Table,{{"CCY", type text}, {"Reporting Currency", type logical}}),
+				    ReportingCurrencies = Table.Distinct(Table.SelectColumns(Table.SelectRows(ChangedCurrencyTableTypes,each [Reporting Currency] = true and [CCY] <> BaseCurrency),{"CCY"})),
+				    SymbolString = Text.Combine(Table.Column(Table.Distinct(Table.Combine({InvestmentCurrencies,ReportingCurrencies})),"CCY"),","),
+				    APICall = Json.Document(Web.Contents(FXSourceBaseURL,[RelativePath = StartDateFormated & "..", Query = [base = BaseCurrency, symbols = SymbolString]])),
+				    ExtractRates = APICall[rates],
+				    ConvertedToTable = Record.ToTable(ExtractRates),
+				    RenamedDateColumn = Table.RenameColumns(ConvertedToTable,{{"Name", "Date"}}),
+				    RecordToRow = Table.AddColumn(RenamedDateColumn, "RatesToTable", each Record.ToTable([Value])),
+				    ExpandedKeyValueList = Table.ExpandTableColumn(RecordToRow, "RatesToTable", {"Name", "Value"}, {"CCY", "Rate"}),
+				    RemovedColumns = Table.RemoveColumns(ExpandedKeyValueList,{"Value"}),
+				    #"Changed Type" = Table.TransformColumnTypes(RemovedColumns,{{"Date", type date}, {"CCY", type text}, {"Rate", type number}}),
+				    #"Merged Queries" = Table.NestedJoin(#"Changed Type", {"CCY"}, Currencies, {"CCY"}, "Currencies", JoinKind.LeftOuter),
+				    #"Expanded Currencies" = Table.ExpandTableColumn(#"Merged Queries", "Currencies", {"CurrencyKey"}, {"CurrencyKey"}),
+				    #"Sorted Rows" = Table.Sort(#"Expanded Currencies",{{"Date", Order.Ascending}})
+				in
+				    #"Sorted Rows"
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

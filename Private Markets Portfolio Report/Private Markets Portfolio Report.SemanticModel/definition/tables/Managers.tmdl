@@ -1,0 +1,42 @@
+table Managers
+	lineageTag: f3fef421-bc9b-498a-95f6-5604a3a689a5
+
+	/// The investment's GP/manager
+	column Manager
+		dataType: string
+		lineageTag: c2319ca8-1c5e-4f94-bade-54288877768d
+		summarizeBy: none
+		sourceColumn: Manager
+
+		annotation SummarizationSetBy = Automatic
+
+	column ManagerKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 80b362f1-29b6-4981-a526-af9472062a19
+		summarizeBy: none
+		sourceColumn: ManagerKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Managers = m
+		mode: import
+		queryGroup: 'Model tables'
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents(ExcelFileURL), null, true),
+				    Managers_Table = Source{[Item="Managers",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Managers_Table,{{"Manager", type text}}),
+				    #"Added Index" = Table.AddIndexColumn(#"Changed Type", "Index", 1, 1, Int64.Type),
+				    #"Renamed Columns" = Table.RenameColumns(#"Added Index",{{"Index", "ManagerKey"}}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Renamed Columns",{"ManagerKey", "Manager"})
+				in
+				    #"Reordered Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

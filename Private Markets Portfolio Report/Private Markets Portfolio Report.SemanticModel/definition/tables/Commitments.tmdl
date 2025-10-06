@@ -1,0 +1,144 @@
+table Commitments
+	isHidden
+	lineageTag: 42a005a9-5cf8-4e02-8fa6-1bb991799ab8
+
+	column Amount
+		dataType: decimal
+		isHidden
+		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		lineageTag: 462e36a2-06c7-49af-96ad-a1c31b16e2cc
+		summarizeBy: sum
+		sourceColumn: Amount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column PortfolioKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 728f850e-d4a0-4fd4-936e-80d40880c380
+		summarizeBy: count
+		sourceColumn: PortfolioKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvestmentKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 14df85f9-bf57-4bed-ab14-a719af90d11a
+		summarizeBy: count
+		sourceColumn: InvestmentKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: 638b4f19-846f-427f-8b2e-e32d2ce4f13b
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variation
+			isDefault
+			relationship: 11dd54ef-9586-4ebc-a506-bd4a7bc3fd6e
+			defaultHierarchy: LocalDateTable_b61fe6fd-c5e8-42bc-9a5e-3ae3be63d94b.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ManagerKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 79034719-cabe-4390-ba14-d5f47f2ea099
+		summarizeBy: count
+		sourceColumn: ManagerKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrencyKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 0a4edda9-61dd-4b89-8c71-287d84851147
+		summarizeBy: count
+		sourceColumn: CurrencyKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column StrategyKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 158c73a8-10d9-46ea-a03c-c5393138f19f
+		summarizeBy: count
+		sourceColumn: StrategyKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column RegionKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 592ac824-06d5-418e-874d-470d3aa7be7d
+		summarizeBy: count
+		sourceColumn: RegionKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column AssetClassKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 647edb12-0a50-4bf8-82e3-a6061941ea11
+		summarizeBy: count
+		sourceColumn: AssetClassKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Commitments = m
+		mode: import
+		queryGroup: 'Model tables'
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents(ExcelFileURL), null, true),
+				    Commitments_Table = Source{[Item="Commitments",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Commitments_Table,{{"Date", type date}, {"Portfolio", type text}, {"Investment", type text}, {"Amount", Currency.Type}}),
+				    RemovedFutureDates = Table.SelectRows(#"Changed Type", each [Date] < DateTime.Date(DateTime.LocalNow())),
+				    JoinPortfolios = Table.NestedJoin(RemovedFutureDates, {"Portfolio"}, Portfolios, {"Portfolio"}, "Portfolios", JoinKind.LeftOuter),
+				    JoinInvestments = Table.NestedJoin(JoinPortfolios, {"Investment"}, Investments, {"Investment"}, "Investments", JoinKind.LeftOuter),
+				    ExpandedPortfolios = Table.ExpandTableColumn(JoinInvestments, "Portfolios", {"PortfolioKey"}, {"PortfolioKey"}),
+				    ExpandedInvestments = Table.ExpandTableColumn(ExpandedPortfolios, "Investments", {"InvestmentKey", "ManagerKey", "CurrencyKey", "StrategyKey", "RegionKey", "AssetClassKey"}, {"InvestmentKey", "ManagerKey", "CurrencyKey", "StrategyKey", "RegionKey", "AssetClassKey"}),
+				    RemovedStringColumns = Table.RemoveColumns(ExpandedInvestments,{"Portfolio", "Investment"})
+				in
+				    RemovedStringColumns
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

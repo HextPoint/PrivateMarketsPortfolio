@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Private Markets Portfolio Report"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "b1f9b70d-4c90-4fbd-afd3-e2fd3b46ad6b"
+  }
+}

@@ -1,0 +1,252 @@
+expression 'Commitment Positions' =
+		let
+		    Source = Excel.Workbook(Web.Contents(ExcelFileURL), null, true),
+		    Commitments_Table = Source{[Item="Commitments",Kind="Table"]}[Data],
+		    #"Changed Type" = Table.TransformColumnTypes(Commitments_Table,{{"Date", type any}, {"Portfolio", type any}, {"Investment", type any}, {"Amount", type any}}),
+		    RemovedFutureDates = Table.SelectRows(#"Changed Type", each [Date] < DateTime.Date(DateTime.LocalNow())),
+		    #"Removed Columns" = Table.RemoveColumns(RemovedFutureDates,{"Date", "Amount"}),
+		    #"Removed Duplicates" = Table.Distinct(#"Removed Columns")
+		in
+		    #"Removed Duplicates"
+	lineageTag: 953d5952-03ad-4937-b5ba-3bf3839bf4d1
+	queryGroup: 'Load Disabled'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Transaction Positions' =
+		let
+		    Source = Excel.Workbook(Web.Contents(ExcelFileURL), null, true),
+		    Transactions_Table = Source{[Item="Transactions",Kind="Table"]}[Data],
+		    #"Changed Type" = Table.TransformColumnTypes(Transactions_Table,{{"Date", type any}, {"Portfolio", type any}, {"Investment", type any}, {"Transaction Type", type any}, {"Amount", type any}}),
+		    RemovedFutureDates = Table.SelectRows(#"Changed Type", each [Date] < DateTime.Date(DateTime.LocalNow())),
+		    #"Removed Columns" = Table.RemoveColumns(RemovedFutureDates,{"Date", "Transaction Type", "Amount","Prior Contribution Amount","Close Transaction","Recallable"}),
+		    #"Removed Duplicates" = Table.Distinct(#"Removed Columns")
+		in
+		    #"Removed Duplicates"
+	lineageTag: 8452c4ea-e98a-4724-829e-350b7838d739
+	queryGroup: 'Load Disabled'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression 'Valuation Positions' =
+		let
+		    Source = Excel.Workbook(Web.Contents(ExcelFileURL), null, true),
+		    Valuations_Table = Source{[Item="Valuations",Kind="Table"]}[Data],
+		    #"Changed Type" = Table.TransformColumnTypes(Valuations_Table,{{"Date", type any}, {"Portfolio", type any}, {"Investment", type any}, {"Amount", type any}}),
+		    RemovedFutureDates = Table.SelectRows(#"Changed Type", each [Date] < DateTime.Date(DateTime.LocalNow())),
+		    #"Removed Columns" = Table.RemoveColumns(RemovedFutureDates,{"Date", "Amount"}),
+		    #"Removed Duplicates" = Table.Distinct(#"Removed Columns")
+		in
+		    #"Removed Duplicates"
+	lineageTag: 9c8177b0-5e66-4b39-a678-088f22869272
+	queryGroup: 'Load Disabled'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
+expression GetMinPosDate = ```
+		(
+		OutputColumnName as text,
+		Positions as table,
+		TxTable as table, 
+		optional PosInvesmentColumnName as nullable text,
+		optional PosPortfoliColumnName as nullable text,
+		optional TxInvestmentColumnName as nullable text, 
+		optional TxPortfolioColumnName as nullable text,
+		optional TxDateColumnName as nullable text
+		) as table =>
+		let
+		    // Resolve parameter defaults
+		    PosInvCol = if PosInvesmentColumnName <> null then PosInvesmentColumnName else "InvestmentKey",
+		    PosPortCol = if PosPortfoliColumnName <> null then PosPortfoliColumnName else "PortfolioKey",
+		    TxInvCol = if TxInvestmentColumnName <> null then TxInvestmentColumnName else "InvestmentKey",
+		    TxPortCol = if TxPortfolioColumnName <> null then TxPortfolioColumnName else "PortfolioKey",
+		    TxDateCol = if TxDateColumnName <> null then TxDateColumnName else "Date",
+		
+		    // Ensure the date column is truly a date (safe-cast from text; nulls preserved)
+		    TxWithDate =
+		        Table.TransformColumns(
+		            TxTable,
+		            {{TxDateCol, each try Date.From(_) otherwise null, type nullable date}}
+		        ),
+		
+		    // Compute the minimum date per investment and per portfolio using a grouped aggregation (fast)
+		    MinByPortInv =
+		        Table.Group(
+		            TxWithDate,
+		            {TxInvCol, TxPortCol},
+		            {
+		                {"MinDate",
+		                    (t as table) as nullable date =>
+		                        let
+		                            dates = List.RemoveNulls(Table.Column(t, TxDateCol))
+		                        in
+		                            if List.IsEmpty(dates) then null else List.Min(dates),
+		                 type nullable date}
+		            }
+		        ),
+		
+		    // Left join onto the Investments table and expand the MinDate as the requested output column
+		    Joined =
+		        Table.NestedJoin(Positions, {PosInvCol, PosPortCol}, MinByPortInv, {TxInvCol, TxPortCol}, "MinTbl", JoinKind.LeftOuter),
+		    Result =
+		        Table.TransformColumns(
+		            Table.ExpandTableColumn(Joined, "MinTbl", {"MinDate"}, {OutputColumnName}),
+		            {{OutputColumnName, each _, type nullable date}}
+		        )
+		in
+		    Result
+		```
+	lineageTag: 96f2f2b1-b46b-4396-9e5c-c2c19413a271
+	queryGroup: Functions
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Function
+
+expression GetMaxPosDate = ```
+		(
+		OutputColumnName as text,
+		PosTable as table,
+		TxTable as table,
+		optional PosInvesmentColumnName as nullable text,
+		optional PosPortfoliColumnName as nullable text,
+		optional TxInvestmentColumnName as nullable text, 
+		optional TxPortfolioColumnName as nullable text,
+		optional TxDateColumnName as nullable text
+		) as table =>
+		let
+		    // Resolve parameter defaults
+		    PosInvCol = if PosInvesmentColumnName <> null then PosInvesmentColumnName else "InvestmentKey",
+		    PosPortCol = if PosPortfoliColumnName <> null then PosPortfoliColumnName else "PortfolioKey",
+		    TxInvCol = if TxInvestmentColumnName <> null then TxInvestmentColumnName else "InvestmentKey",
+		    TxPortCol = if TxPortfolioColumnName <> null then TxPortfolioColumnName else "PortfolioKey",
+		    TxDateCol = if TxDateColumnName <> null then TxDateColumnName else "Date",
+		
+		    // Ensure the date column is truly a Int64 (safe-cast from text; nulls preserved)
+		    TxWithDate =
+		        Table.TransformColumns(
+		            TxTable,
+		            {{TxDateCol, each try Date.From(_) otherwise null, type nullable date}}
+		        ),
+		
+		    // Compute the minimum date per investment and per portfolio using a grouped aggregation (fast)
+		    MaxByPortInv =
+		        Table.Group(
+		            Table.SelectRows(TxWithDate, each ([Close Transaction] = true)),
+		            {TxInvCol, TxPortCol},
+		            {
+		                {"MaxDate",
+		                    (t as table) as nullable date =>
+		                        let
+		                            dates = List.RemoveNulls(Table.Column(t, TxDateCol))
+		                        in
+		                            if List.IsEmpty(dates) then null else List.Max(dates),
+		                 type nullable date}
+		            }
+		        ),
+		
+		    // Left join onto the Investments table and expand the MinDate as the requested output column
+		    Joined =
+		        Table.NestedJoin(PosTable, {PosInvCol, PosPortCol}, MaxByPortInv, {TxInvCol, TxPortCol}, "MaxTbl", JoinKind.LeftOuter),
+		    Result =
+		        Table.TransformColumns(
+		            Table.ExpandTableColumn(Joined, "MaxTbl", {"MaxDate"}, {OutputColumnName}),
+		            {{OutputColumnName, each _, type nullable date}}
+		        )
+		in
+		    Result
+		```
+	lineageTag: e75ee806-0107-451a-90ef-67405c9ad53b
+	queryGroup: Functions
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Function
+
+expression GetMinDate = ```
+		(
+		TxTable as table, 
+		optional TxDateColumnName as nullable text
+		) as nullable date =>
+		let
+		    // Resolve parameter defaults
+		    TxDateCol = if TxDateColumnName <> null then TxDateColumnName else "Date",
+		
+		    DateList = Table.Column(TxTable, TxDateCol),
+		    CleanList = List.RemoveNulls(DateList),
+		    MinDate = if List.IsEmpty(CleanList) then null else List.Min(CleanList)
+		in
+		    MinDate
+		```
+	lineageTag: c43e4d01-021b-47fc-a89c-a8ab03b1ccc7
+	queryGroup: Functions
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Function
+
+expression GetMaxDate = ```
+		(
+		TxTable as table, 
+		optional TxDateColumnName as nullable text
+		) as nullable date =>
+		let
+		    // Resolve parameter defaults
+		    TxDateCol = if TxDateColumnName <> null then TxDateColumnName else "Date",
+		
+		    DateList = Table.Column(TxTable, TxDateCol),
+		    CleanList = List.RemoveNulls(DateList),
+		    MaxDate = if List.IsEmpty(CleanList) then null else List.Max(CleanList)
+		in
+		    MaxDate
+		```
+	lineageTag: 8452f4dd-a43c-4fd8-af3e-75cefb97218d
+	queryGroup: Functions
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Function
+
+expression FXSourceBaseURL = "https://api.frankfurter.dev/v1/" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: 6b33b970-2340-4e53-9dd8-67b5f2a07b63
+	queryGroup: Parameters
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+
+expression BaseCurrency = "EUR" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: e278e4f7-cb3f-42f4-8d48-555144a6ca8e
+	queryGroup: Parameters
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+
+expression ExcelFileURL = "https://github.com/HextPoint/PrivateMarketsPortfolio/raw/1bb6c630ba8ba5d729f1a90950a2d1df0e0bf1fc/Private%20Markets%20Portfolio.xlsx" meta [IsParameterQuery=true, Type="Text", IsParameterQueryRequired=true]
+	lineageTag: b338c3e7-f49b-4e0a-a8ad-1168ecbdcb87
+	queryGroup: Parameters
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Text
+
+expression ReportingCurrenciesForPositionMeasures =
+		let
+		    Unfiltered_Currencies = Currencies,
+		    FilteredRows = Table.SelectRows(Unfiltered_Currencies, each ([Reporting Currency] = true))
+		in
+		    FilteredRows
+	lineageTag: d9fb0058-c519-451d-a82c-797f565a9d22
+	queryGroup: 'Load Disabled'
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

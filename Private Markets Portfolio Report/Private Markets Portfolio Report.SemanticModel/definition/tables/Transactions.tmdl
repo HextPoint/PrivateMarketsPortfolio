@@ -1,0 +1,306 @@
+table Transactions
+	lineageTag: edd3b2ce-0156-4883-866e-5a304a9cebad
+
+	/// Only visible when there is a single investment currency in the filter context. The transaction amount in the investment currency.
+	measure 'Transaction Amount' = IF(HASONEVALUE('Transactions'[CurrencyKey]),SUM('Transactions'[Amount]),BLANK())
+		lineageTag: 8185e7e7-7edd-4158-acf7-48842af57087
+
+		formatStringDefinition = HextPoint.PowerBI.TransactionCurrencyFormat()
+
+	/// Only visible when there is a single investment currency in the filter context. The cash flow from the transaction(s) in the investment currency.
+	measure 'Transaction Cash Flow' = IF(HASONEVALUE('Transactions'[CurrencyKey]),SUM('Transactions'[CashFlowAmount]),BLANK())
+		lineageTag: a44e6981-73bc-44ad-a063-26fcc9bced8d
+
+		formatStringDefinition = HextPoint.PowerBI.TransactionCurrencyFormat()
+
+	/// Only visible when there is a single investment currency in the filter context. The amount of prior contributions toward the commitment for secondary purchase.
+	measure 'Prior Contribution' = IF(HASONEVALUE('Transactions'[CurrencyKey]),SUM('Transactions'[Prior Contribution Amount]),BLANK())
+		lineageTag: 252648e7-6cf6-4310-892a-f8bef8197e57
+
+		formatStringDefinition = HextPoint.PowerBI.TransactionCurrencyFormat()
+
+	/// Only visible when there is a single investment currency in the filter context. The amount recallable from a distribution transaction.
+	measure 'Recallable Amount' = IF(HASONEVALUE('Transactions'[CurrencyKey]),CALCULATE(SUM('Transactions'[RecallableAmount]),'Transaction Types'[Is Contribution] = FALSE),BLANK())
+		lineageTag: 4cb634c9-a528-40b0-9698-c467a42423fc
+
+		formatStringDefinition = HextPoint.PowerBI.TransactionCurrencyFormat()
+
+	column Amount
+		dataType: decimal
+		isHidden
+		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		lineageTag: 4e2714b9-d64c-4829-a827-4fdab9f1961c
+		summarizeBy: sum
+		sourceColumn: Amount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column PortfolioKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 50ab0e07-92f2-47bb-93b2-74d0dd393dcc
+		summarizeBy: none
+		sourceColumn: PortfolioKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvestmentKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d8dbc62d-acc7-4780-9b3d-2ff3f876b743
+		summarizeBy: none
+		sourceColumn: InvestmentKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TransactionTypeKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 1f9de48b-3833-4130-ba4b-7322a5b43731
+		summarizeBy: none
+		sourceColumn: TransactionTypeKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Prior Contribution Amount'
+		dataType: decimal
+		isHidden
+		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		lineageTag: ecfb6f41-3e3e-4b6d-896f-c81fd968d4be
+		summarizeBy: sum
+		sourceColumn: Prior Contribution Amount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column 'Close Transaction'
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: b00b4076-a8a7-42b5-98c4-46d7eaea0673
+		summarizeBy: none
+		sourceColumn: Close Transaction
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Recallable
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 9cf9f138-8311-4cfa-9338-0923fff9790e
+		summarizeBy: none
+		sourceColumn: Recallable
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		isHidden
+		formatString: Long Date
+		lineageTag: 8d7c7782-95b4-407d-b2d1-7e1b074dc56b
+		summarizeBy: none
+		sourceColumn: Date
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Is Secondary Purchase'
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 1d943d1f-3c12-48eb-877f-0a7145a93098
+		summarizeBy: none
+		sourceColumn: Is Secondary Purchase
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Is Contribution'
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 2f6f9730-587b-4dbf-99f6-07a00d68f1fc
+		summarizeBy: none
+		sourceColumn: Is Contribution
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CashFlowAmount
+		dataType: decimal
+		isHidden
+		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		lineageTag: 0f370dc5-b037-49c1-8593-be75d7e54624
+		summarizeBy: sum
+		sourceColumn: CashFlowAmount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column ContributionToCommitmentAmount
+		dataType: decimal
+		isHidden
+		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		lineageTag: bf242fc4-fb9b-4715-8869-62d24edd8820
+		summarizeBy: sum
+		sourceColumn: ContributionToCommitmentAmount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column RecallableAmount
+		dataType: decimal
+		isHidden
+		formatString: "£"#,0.###############;-"£"#,0.###############;"£"#,0.###############
+		lineageTag: f0c425ea-09b4-41ae-8c91-ff87c31478d2
+		summarizeBy: sum
+		sourceColumn: RecallableAmount
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-GB"}
+
+	column ManagerKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 212e6201-4141-4073-a3b8-9849bbd922f5
+		summarizeBy: none
+		sourceColumn: ManagerKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CurrencyKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ebee085f-eff7-4ada-bcf7-aae035bb4e97
+		summarizeBy: none
+		sourceColumn: CurrencyKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column StrategyKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 5382f2f0-185c-40e9-a11c-b36c377546d6
+		summarizeBy: none
+		sourceColumn: StrategyKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column RegionKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 44a7a08d-664e-4e78-bcbf-c8bd091a7c28
+		summarizeBy: none
+		sourceColumn: RegionKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column AssetClassKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 8bbef4f9-bf9e-4fc7-b3db-c8b2f375b54f
+		summarizeBy: none
+		sourceColumn: AssetClassKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Indicates the distribution transaction is recallable.
+	column 'Is Recallable'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 49c146f7-4124-4e4d-8062-fa8f9901e56a
+		summarizeBy: none
+		sourceColumn: Is Recallable
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Indicates that the distribution is the final transaction for the investment.
+	column 'Is Close Transaction'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 93060b27-fb2d-47c9-8099-63d4c9f858c5
+		summarizeBy: none
+		sourceColumn: Is Close Transaction
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Transactions = m
+		mode: import
+		queryGroup: 'Model tables'
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents(ExcelFileURL), null, true),
+				    Transactions_Table = Source{[Item="Transactions",Kind="Table"]}[Data],
+				    ChangedTypes = Table.TransformColumnTypes(Transactions_Table,{{"Date", type date}, {"Portfolio", type text}, {"Investment", type text}, {"Transaction Type", type text}, {"Amount", Currency.Type},{"Prior Contribution Amount", Currency.Type},{"Close Transaction", type logical},{"Recallable", type logical}}),
+				    RemovedFutureDates = Table.SelectRows(ChangedTypes, each [Date] < DateTime.Date(DateTime.LocalNow())),
+				    JoinPortfolio = Table.NestedJoin(RemovedFutureDates, {"Portfolio"}, Portfolios, {"Portfolio"}, "Portfolios", JoinKind.LeftOuter),
+				    JoinInvestments = Table.NestedJoin(JoinPortfolio, {"Investment"}, Investments, {"Investment"}, "Investments", JoinKind.LeftOuter),
+				    JoinTransactionTypes = Table.NestedJoin(JoinInvestments, {"Transaction Type"}, #"Transaction Types", {"Transaction Type"}, "Transaction Types", JoinKind.LeftOuter),
+				    ExpandedPortfolios = Table.ExpandTableColumn(JoinTransactionTypes, "Portfolios", {"PortfolioKey"}, {"PortfolioKey"}),
+				    ExpandedInvestments = Table.ExpandTableColumn(ExpandedPortfolios, "Investments", {"InvestmentKey", "ManagerKey", "CurrencyKey", "StrategyKey", "RegionKey", "AssetClassKey"}, {"InvestmentKey", "ManagerKey", "CurrencyKey", "StrategyKey", "RegionKey", "AssetClassKey"}),
+				    ExpandedTransactionTypes = Table.ExpandTableColumn(ExpandedInvestments, "Transaction Types", {"TransactionTypeKey", "Is Secondary Purchase", "Is Contribution"}, {"TransactionTypeKey", "Is Secondary Purchase", "Is Contribution"}),
+				    RemovedStringColumns = Table.RemoveColumns(ExpandedTransactionTypes,{"Portfolio", "Investment", "Transaction Type"}),
+				    AddedCashFlowColumn = Table.AddColumn(RemovedStringColumns,"CashFlowAmount", each if [Is Contribution] = true then - [Amount] else [Amount]),
+				    AddedContributionToCommitmentColumn = Table.AddColumn(AddedCashFlowColumn,"ContributionToCommitmentAmount", each if [Is Contribution] = true then if [Is Secondary Purchase] = false then [Amount] else [Prior Contribution Amount] else 0),
+				    AddedRecallableAmountColumn = Table.AddColumn(AddedContributionToCommitmentColumn, "RecallableAmount", each if [Recallable] = true and [Is Contribution] = false then [Amount] else 0),
+				    AddedCleanRecallableColumn = Table.AddColumn(AddedRecallableAmountColumn, "Is Recallable", each if [Recallable] = true then true else false),
+				    AddedCleanCloseColumn = Table.AddColumn(AddedCleanRecallableColumn, "Is Close Transaction", each if [Close Transaction] = true then true else false),
+				    ChangedNewColumnType = Table.TransformColumnTypes(AddedCleanCloseColumn,{{"CashFlowAmount", Currency.Type}, {"ContributionToCommitmentAmount", Currency.Type},{"RecallableAmount", Currency.Type},{"Is Recallable", type logical},{"Is Close Transaction", type logical}})
+				in
+				    ChangedNewColumnType
+
+	changedProperty = IsHidden
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,125 @@
+table Dates
+	lineageTag: ab228d05-fe90-44a5-a2db-1893fe5ff34c
+	dataCategory: Time
+
+	/// The minimum date in the filter context.
+	measure 'Min Date' = MIN('Dates'[Date])
+		formatString: Short Date
+		lineageTag: 7515a8b2-97d1-40a3-a1ac-80cc7026d74d
+
+	/// The maximum date in the filter context.
+	measure 'Max Date' = MAX('Dates'[Date])
+		formatString: Short Date
+		lineageTag: a5a4bfbf-a689-420f-999c-966d672ca022
+
+	column Date
+		dataType: dateTime
+		isKey
+		formatString: dd/mm/yyyy
+		lineageTag: 26b4a66f-1b53-4438-855e-a1b187f0bc73
+		dataCategory: PaddedDateTableDates
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isDateTimeCustom":true}
+
+	column Year = DATE(YEAR('Dates'[Date]),1,1)
+		formatString: yyyy
+		lineageTag: 36cacc78-24b2-4b1b-831d-fdd3554d2af5
+		dataCategory: Years
+		summarizeBy: none
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column Month = ENDOFMONTH('Dates'[Date])
+		formatString: MMM
+		lineageTag: a7497f6b-7c39-49f5-b7c0-fe2d30a402d7
+		dataCategory: MonthOfYear
+		summarizeBy: none
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+		annotation PBI_FormatHint = {"isCustom":true}
+
+	column Quarter = "Q" & QUARTER('Dates'[Date])
+		lineageTag: a8e7e740-5587-49d7-aadb-310eabad9828
+		dataCategory: QuarterOfYear
+		summarizeBy: none
+		sortByColumn: 'Quarter Number'
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column 'Quarter Number' = QUARTER('Dates'[Date])
+		formatString: 0
+		lineageTag: d1c1780c-a2b0-406a-bb71-d215be6b6842
+		summarizeBy: sum
+
+		changedProperty = DataType
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	hierarchy 'Date Hierarchy'
+		lineageTag: f8f629b4-b919-4e4a-8385-0d122a990e7c
+
+		level Year
+			lineageTag: 551b2fe0-ca22-4bcc-a40e-44c7fd0fc00e
+			column: Year
+
+		level Quarter
+			lineageTag: 46c5c056-f693-4b10-94dd-6d93836b9353
+			column: Quarter
+
+		level Month
+			lineageTag: 90ac8b4a-43ff-4cb8-acb2-855aecff0bf6
+			column: Month
+
+		level Date
+			lineageTag: 244f9e18-938b-4537-8c6d-1c359d6a6446
+			column: Date
+
+	partition Dates = m
+		mode: import
+		queryGroup: 'Model tables'
+		source =
+				let
+				    //Variables
+				    CommitmentStartDate = GetMinDate(Commitments) as nullable date,
+				    TransactionStartDate = GetMinDate(Transactions) as nullable date,
+				    ValuationStartDate = GetMinDate(Valuations) as nullable date,
+				    StartDate = List.Min(List.RemoveNulls({CommitmentStartDate, TransactionStartDate, ValuationStartDate})),
+				    EndDate = Date.AddDays(DateTime.Date(DateTime.LocalNow()),-1) as date,
+				    Duration = Duration.Days(Duration.From(EndDate-StartDate))+1,
+				
+				    //Date Columns
+				    Dates = List.Dates(StartDate,Duration,#duration(1,0,0,0)),
+				    #"Converted to Table" = Table.FromList(Dates, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
+				    #"Renamed Columns" = Table.RenameColumns(#"Converted to Table",{{"Column1", "Date"}}),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Renamed Columns",{{"Date", type date}}),
+				    #"Sorted Rows" = Table.Sort(#"Changed Type",{{"Date", Order.Ascending}})
+				in
+				    #"Sorted Rows"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

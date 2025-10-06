@@ -1,0 +1,41 @@
+table 'Regional Focus'
+	lineageTag: 8ed6f24b-323e-4663-88ae-41a3509517ae
+
+	column RegionKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 6e9dbb60-11e9-40c6-b864-3e75cd0a9320
+		summarizeBy: none
+		sourceColumn: RegionKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The regional focus of the investment.
+	column Region
+		dataType: string
+		lineageTag: 2b53c4d6-4455-4250-a37e-c971bc9eeba7
+		summarizeBy: none
+		sourceColumn: Region
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Regional Focus' = m
+		mode: import
+		queryGroup: 'Model tables'
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents(ExcelFileURL), null, true),
+				    Regions_Table = Source{[Item="Regions",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Regions_Table,{{"Region", type text}}),
+				    #"Added Index" = Table.AddIndexColumn(#"Changed Type", "RegionKey", 1, 1, Int64.Type),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Added Index",{"RegionKey", "Region"})
+				in
+				    #"Reordered Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

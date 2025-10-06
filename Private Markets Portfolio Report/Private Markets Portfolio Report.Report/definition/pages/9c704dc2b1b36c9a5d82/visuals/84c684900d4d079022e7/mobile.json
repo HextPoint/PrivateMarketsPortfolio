@@ -1,0 +1,64 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainerMobileState/2.2.0/schema.json",
+  "position": {
+    "x": 50,
+    "y": 165,
+    "z": 3000,
+    "height": 50,
+    "width": 274,
+    "tabOrder": 14000
+  },
+  "objects": {
+    "shapeCustomRectangle": [],
+    "layout": [],
+    "value": [
+      {
+        "properties": {
+          "fontColor": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#1F3F5B'"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "selector": {
+          "id": "default"
+        }
+      }
+    ],
+    "spacing": [],
+    "fillCustom": [],
+    "outline": [],
+    "accentBar": [],
+    "label": [
+      {
+        "properties": {
+          "fontColor": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#666666'"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "selector": {
+          "id": "default"
+        }
+      }
+    ],
+    "padding": [],
+    "glowCustom": [],
+    "shadowCustom": [],
+    "overFlow": [],
+    "border": []
+  }
+}

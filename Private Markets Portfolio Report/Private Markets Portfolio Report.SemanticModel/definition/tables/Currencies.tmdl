@@ -1,0 +1,117 @@
+table Currencies
+	isHidden
+	lineageTag: f5242b17-b05a-4ba1-aaa8-86cc2f6d275b
+
+	column CurrencyKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 97f52e8b-cc55-4cb0-8147-243e924e533c
+		summarizeBy: none
+		sourceColumn: CurrencyKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Currency Name'
+		dataType: string
+		isHidden
+		lineageTag: cdfd0b02-ebe6-40d2-984c-28f38156d03b
+		summarizeBy: none
+		sourceColumn: Currency Name
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CCY
+		dataType: string
+		isHidden
+		lineageTag: aab4ec53-22f3-489b-b3c8-27180cbc33be
+		summarizeBy: none
+		sourceColumn: CCY
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Currency Symbol'
+		dataType: string
+		isHidden
+		lineageTag: ccd6f120-b592-4692-b255-e4c24abbc8d4
+		summarizeBy: none
+		sourceColumn: Currency Symbol
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Reporting Currency'
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: c7be700d-e09b-45e6-ba61-6b6cb547d67d
+		summarizeBy: none
+		sourceColumn: Reporting Currency
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Currency format string'
+		dataType: string
+		isHidden
+		lineageTag: 5ef24252-a498-49a6-80c8-d886e2b78d22
+		summarizeBy: none
+		sourceColumn: Currency format string
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsBaseCurrency
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4d09f671-2c78-47e8-9771-d3aad3355a11
+		summarizeBy: none
+		sourceColumn: IsBaseCurrency
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Transaction format string'
+		dataType: string
+		isHidden
+		lineageTag: 40f3d707-edbd-4935-b5ca-67382aebd23c
+		summarizeBy: none
+		sourceColumn: Transaction format string
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Currencies = m
+		mode: import
+		queryGroup: 'Model tables'
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents(ExcelFileURL), null, true),
+				    Currencies_Table = Source{[Item="Currencies",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Currencies_Table,{{"Currency Name", type text}, {"CCY", type text}, {"Currency Symbol", type text}, {"Currency format string", type text}, {"Transaction format string", type text},{"Reporting Currency", type logical}}),
+				    #"Sorted Rows" = Table.Sort(#"Changed Type",{{"CCY", Order.Ascending}}),
+				    AddedCurencyKey = Table.AddIndexColumn(#"Sorted Rows", "CurrencyKey", 1, 1, Int64.Type),
+				    AddedBaseCurrency = Table.AddColumn(AddedCurencyKey,"IsBaseCurrency", each if [CCY] = BaseCurrency then true else false),
+				    #"Changed Type1" = Table.TransformColumnTypes(AddedBaseCurrency,{{"IsBaseCurrency", type logical}}),
+				    ReorderedColumns = Table.ReorderColumns(#"Changed Type1",{"CurrencyKey", "Currency Name", "CCY", "Currency Symbol", "Currency format string"})
+				in
+				    ReorderedColumns
+
+	changedProperty = IsHidden
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

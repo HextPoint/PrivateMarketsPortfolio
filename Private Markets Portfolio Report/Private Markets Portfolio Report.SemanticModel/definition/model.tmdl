@@ -1,0 +1,57 @@
+model Model
+	culture: en-GB
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	discourageImplicitMeasures
+	sourceQueryCulture: en-GB
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup 'Load Disabled'
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup Functions
+
+	annotation PBI_QueryGroupOrder = 1
+
+queryGroup 'Model tables'
+
+	annotation PBI_QueryGroupOrder = 2
+
+queryGroup Parameters
+
+	annotation PBI_QueryGroupOrder = 3
+
+annotation PBI_QueryOrder = ["Dates","Asset Classes","Managers","Strategies","Investments","Portfolios","Regional Focus","Transaction Types","Commitments","Transactions","Valuations","Investment Metrics","Settings","ExcelFileURL","FXSourceBaseURL","BaseCurrency","Commitment Positions","Transaction Positions","Valuation Positions","ReportingCurrenciesForPositionMeasures","GetMinPosDate","GetMaxPosDate","GetMinDate","GetMaxDate","FX Rates","Currencies","Reporting Currencies","Investment Currencies"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["TMDLView_Desktop","DaxQueryView_Desktop","CalcGroup","DevMode"]
+
+ref table Commitments
+ref table 'Asset Classes'
+ref table Investments
+ref table Managers
+ref table Portfolios
+ref table 'Regional Focus'
+ref table Strategies
+ref table 'Transaction Types'
+ref table Transactions
+ref table Valuations
+ref table Dates
+ref table Settings
+ref table DateTableTemplate_5a3a9720-c0f3-4929-aeb2-e2b5b76b6c6a
+ref table 'Investment Metrics'
+ref table LocalDateTable_9eedec17-a5d9-487f-9ce5-f414e912a8ef
+ref table 'FX Rates'
+ref table LocalDateTable_2210ebf9-e8c9-44f0-922f-913288a91a58
+ref table 'Reporting Currencies'
+ref table 'Investment Currencies'
+ref table Currencies
+ref table 'Metric Selection'
+ref table 'Data Dictionary'
+ref table LocalDateTable_b61fe6fd-c5e8-42bc-9a5e-3ae3be63d94b
+
+ref cultureInfo en-GB
+

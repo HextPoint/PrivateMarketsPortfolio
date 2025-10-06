@@ -1,0 +1,42 @@
+table 'Asset Classes'
+	lineageTag: 8140847a-0d87-41a9-888e-d082f2df0a7f
+
+	/// The asset class of the investment.
+	column 'Asset Class'
+		dataType: string
+		lineageTag: ac866389-0244-482c-b4e2-b93f8e188394
+		summarizeBy: none
+		sourceColumn: Asset Class
+
+		annotation SummarizationSetBy = Automatic
+
+	column AssetClassKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 9eae54c4-8321-4748-861a-f900910d21dc
+		summarizeBy: none
+		sourceColumn: AssetClassKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Asset Classes' = m
+		mode: import
+		queryGroup: 'Model tables'
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents(ExcelFileURL), null, true),
+				    Asset_Classes_Table = Source{[Item="Asset_Classes",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Asset_Classes_Table,{{"Asset Class", type text}}),
+				    #"Added Index" = Table.AddIndexColumn(#"Changed Type", "Index", 1, 1, Int64.Type),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Added Index",{"Index", "Asset Class"}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Reordered Columns",{{"Index", "AssetClassKey"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

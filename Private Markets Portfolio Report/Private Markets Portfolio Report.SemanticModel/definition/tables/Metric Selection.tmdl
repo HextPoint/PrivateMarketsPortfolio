@@ -1,0 +1,132 @@
+table 'Metric Selection'
+	lineageTag: cc1d1228-52e6-4c87-8446-962cb37c61e2
+
+	column 'Metric Selection'
+		lineageTag: bb4cfa4d-e2dc-43e3-be59-0f74c9a771fb
+		summarizeBy: none
+		sourceColumn: [Value1]
+		sortByColumn: 'Metric Selection Order'
+
+		relatedColumnDetails
+			groupByColumn: 'Metric Selection Fields'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Metric Selection Fields'
+		isHidden
+		lineageTag: 09d54036-112c-4cfb-937b-17f356e21cba
+		summarizeBy: none
+		sourceColumn: [Value2]
+		sortByColumn: 'Metric Selection Order'
+
+		extendedProperty ParameterMetadata =
+				{
+				  "version": 3,
+				  "kind": 2
+				}
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Metric Selection Order'
+		isHidden
+		formatString: 0
+		lineageTag: eeb92af1-b575-4fcb-a6da-63b9b7d7b053
+		summarizeBy: sum
+		sourceColumn: [Value3]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Metric Currency'
+		lineageTag: a626f189-25fd-42bc-91cc-e44532e1a038
+		summarizeBy: none
+		sourceColumn: [Value4]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Metric Period'
+		lineageTag: b563f394-beac-4b1f-a678-dec4a71d9d12
+		summarizeBy: none
+		sourceColumn: [Value5]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Metric Selection' = calculated
+		mode: import
+		source =
+				{
+				    ("Valuation (Local)", NAMEOF('Investment Metrics'[Valuation (Local)]), 0, "Investment Currency", "Periodic"),
+				    ("Valuation", NAMEOF('Investment Metrics'[Valuation]), 1, "Reporting Currency", "Periodic"),
+				    ("Valuation (Local)", NAMEOF('Investment Metrics'[Valuation (Local)]), 0, "Investment Currency", "ITD"),
+				    ("Valuation", NAMEOF('Investment Metrics'[Valuation]), 1, "Reporting Currency", "ITD"),
+				    ("P&L (Local)", NAMEOF('Investment Metrics'[P&L (Local)]), 2, "Investment Currency", "Periodic"),
+				    ("Total P&L", NAMEOF('Investment Metrics'[Total P&L]), 3, "Reporting Currency", "Periodic"),
+				    ("Price P&L", NAMEOF('Investment Metrics'[Price P&L]), 4, "Reporting Currency", "Periodic"),
+				    ("FX & Cross P&L", NAMEOF('Investment Metrics'[FX & Cross P&L]), 5, "Reporting Currency", "Periodic"),
+				    ("Cumulative P&L (Local)", NAMEOF('Investment Metrics'[Cumulative P&L (Local)]), 6, "Investment Currency", "Cumulative"),
+				    ("Cumulative Total P&L", NAMEOF('Investment Metrics'[Cumulative Total P&L]), 7, "Reporting Currency", "Cumulative"),
+				    ("Cumulative Price P&L", NAMEOF('Investment Metrics'[Cumulative Price P&L]), 8, "Reporting Currency", "Cumulative"),
+				    ("Cumulative FX & Cross P&L", NAMEOF('Investment Metrics'[Cumulative FX & Cross P&L]), 9, "Reporting Currency", "Cumulative"),
+				    ("P&L (Local) ITD", NAMEOF('Investment Metrics'[P&L ITD (Local)]), 10, "Investment Currency", "ITD"),
+				    ("Total P&L ITD", NAMEOF('Investment Metrics'[Total P&L ITD]), 11, "Reporting Currency", "ITD"),
+				    ("Price P&L ITD", NAMEOF('Investment Metrics'[Price P&L ITD]), 12, "Reporting Currency", "ITD"),
+				    ("FX & Cross P&L ITD", NAMEOF('Investment Metrics'[FX & Cross P&L ITD]), 13, "Reporting Currency", "ITD"),
+				    ("IRR (Local)", NAMEOF('Investment Metrics'[IRR (Local)]), 14, "Investment Currency", "Periodic"),
+				    ("IRR ITD (Local)", NAMEOF('Investment Metrics'[IRR ITD (Local)]), 15, "Investment Currency", "ITD"),
+				    ("IRR TD (Local)", NAMEOF('Investment Metrics'[IRR TD (Local)]), 16, "Investment Currency", "Cumulative"),
+				    ("IRR", NAMEOF('Investment Metrics'[IRR]), 17, "Reporting Currency", "Periodic"),
+				    ("IRR ITD", NAMEOF('Investment Metrics'[IRR ITD]), 18, "Reporting Currency", "ITD"),
+				    ("IRR TD", NAMEOF('Investment Metrics'[IRR TD]), 19, "Reporting Currency", "Cumulative"),
+				    ("TVPI (Local)", NAMEOF('Investment Metrics'[TVPI (Local)]), 20, "Investment Currency", "ITD"),
+				    ("TVPI TD (Local)", NAMEOF('Investment Metrics'[TVPI TD (Local)]),21, "Investment Currency", "Cumulative"),
+				    ("TVPI Window (Local)", NAMEOF('Investment Metrics'[TVPI Window (Local)]),22, "Investment Currency", "Periodic"),
+				    ("TVPI", NAMEOF('Investment Metrics'[TVPI]), 23, "Reporting Currency", "ITD"),
+				    ("TVPI TD", NAMEOF('Investment Metrics'[TVPI TD]), 24, "Reporting Currency", "Cumulative"),
+				    ("TVPI Window", NAMEOF('Investment Metrics'[TVPI Window]), 25, "Reporting Currency", "Periodic"),
+				    ("DPI (Local)", NAMEOF('Investment Metrics'[DPI (Local)]), 26, "Investment Currency", "ITD"),
+				    ("DPI TD (Local)", NAMEOF('Investment Metrics'[DPI TD (Local)]), 27, "Investment Currency", "Cumulative"),
+				    ("DPI Window (Local)", NAMEOF('Investment Metrics'[DPI Window (Local)]), 28, "Investment Currency", "Periodic"),
+				    ("DPI", NAMEOF('Investment Metrics'[DPI]), 29, "Reporting Currency", "ITD"),
+				    ("DPI TD", NAMEOF('Investment Metrics'[DPI TD]), 30, "Reporting Currency", "Cumulative"),
+				    ("DPI Window", NAMEOF('Investment Metrics'[DPI Window]), 31, "Reporting Currency", "Periodic"),
+				    ("RVPI (Local)", NAMEOF('Investment Metrics'[RVPI (Local)]), 32, "Investment Currency", "ITD"),
+				    ("RVPI TD (Local)", NAMEOF('Investment Metrics'[RVPI TD (Local)]), 33, "Investment Currency", "Cumulative"),
+				    ("RVPI Window (Local)", NAMEOF('Investment Metrics'[RVPI Window (Local)]), 34, "Investment Currency", "Periodic"),
+				    ("RVPI", NAMEOF('Investment Metrics'[RVPI]), 35, "Reporting Currency", "ITD"),
+				    ("RVPI TD", NAMEOF('Investment Metrics'[RVPI TD]), 36, "Reporting Currency", "Cumulative"),
+				    ("RVPI Window", NAMEOF('Investment Metrics'[RVPI Window]), 37, "Reporting Currency", "Periodic"),
+				    ("Paid-In Capital (Local)", NAMEOF('Investment Metrics'[Paid-In Capital (Local)]), 38, "Investment Currency", "Periodic"),
+				    ("Paid-In Capital", NAMEOF('Investment Metrics'[Paid-In Capital]), 39, "Reporting Currency", "Periodic"),
+				    ("Distributed Capital (Local)", NAMEOF('Investment Metrics'[Distributed Capital (Local)]), 40, "Investment Currency", "Periodic"),
+				    ("Distributed Capital", NAMEOF('Investment Metrics'[Distributed Capital]), 41, "Reporting Currency", "Periodic"),
+				    ("Cumulative Cash Flow (Local)", NAMEOF('Investment Metrics'[Cumulative Cash Flow (Local)]), 42, "Investment Currency", "Cumulative"),
+				    ("Cumulative Cash Flow", NAMEOF('Investment Metrics'[Cumulative Cash Flow]), 43, "Reporting Currency", "Cumulative"),
+				    ("Net Cash Flow (Local)", NAMEOF('Investment Metrics'[Cash Flow (Local)]), 44, "Investment Currency", "Periodic"),
+				    ("Net Cash Flow", NAMEOF('Investment Metrics'[Cash Flow]), 45, "Reporting Currency", "Periodic"),
+				    ("Cumulative Paid-In Capital (Local)", NAMEOF('Investment Metrics'[Cumulative Paid-In Capital (Local)]), 48, "Investment Currency", "Cumulative"),
+				    ("Cumulative Paid-In Capital", NAMEOF('Investment Metrics'[Cumulative Paid-In Capital]), 49, "Reporting Currency", "Cumulative"),
+				    ("Cumulative Distributed Capital (Local)", NAMEOF('Investment Metrics'[Cumulative Distributed Capital (Local)]), 50, "Investment Currency", "Cumulative"),
+				    ("Cumulative Distributed Capital", NAMEOF('Investment Metrics'[Cumulative Distributed Capital]), 51, "Reporting Currency", "Cumulative"),
+				    ("Paid-In Capital ITD (Local)", NAMEOF('Investment Metrics'[Paid-In Capital ITD (Local)]), 52, "Investment Currency", "ITD"),
+				    ("Paid-In Capital ITD", NAMEOF('Investment Metrics'[Paid-In Capital ITD]), 53, "Reporting Currency", "ITD"),
+				    ("Distributed Capital ITD (Local)", NAMEOF('Investment Metrics'[Distributed Capital ITD (Local)]), 54, "Investment Currency", "ITD"),
+				    ("Distributed Capital ITD", NAMEOF('Investment Metrics'[Distributed Capital ITD]), 55, "Reporting Currency", "ITD"),
+				    ("Commitment (Local)", NAMEOF('Investment Metrics'[Commitment (Local)]), 56, "Investment Currency", "ITD"),
+				    ("Commitment", NAMEOF('Investment Metrics'[Commitment]), 57, "Reporting Currency", "ITD"),
+				    ("Net Called (Local)", NAMEOF('Investment Metrics'[Net Called (Local)]), 58, "Investment Currency", "ITD"),
+				    ("Net Called", NAMEOF('Investment Metrics'[Net Called]), 59, "Reporting Currency", "ITD"),
+				    ("% Called", NAMEOF('Investment Metrics'[% Called]), 58, "Investment Currency", "ITD"),
+				    ("% Called", NAMEOF('Investment Metrics'[% Called]), 59, "Reporting Currency", "ITD"),
+				    ("Outstanding Commitment (Local)", NAMEOF('Investment Metrics'[Outstanding Commitment (Local)]), 58, "Investment Currency", "ITD"),
+				    ("Outstanding Commitment", NAMEOF('Investment Metrics'[Outstanding Commitment]), 59, "Reporting Currency", "ITD"),
+				    ("Commitment (Local)", NAMEOF('Investment Metrics'[Commitment (Local)]), 52, "Investment Currency", "Periodic"),
+				    ("Commitment", NAMEOF('Investment Metrics'[Commitment]), 53, "Reporting Currency", "Periodic"),
+				    ("Net Called (Local)", NAMEOF('Investment Metrics'[Net Called (Local)]), 54, "Investment Currency", "Periodic"),
+				    ("Net Called", NAMEOF('Investment Metrics'[Net Called]), 55, "Reporting Currency", "Periodic"),
+				    ("% Called", NAMEOF('Investment Metrics'[% Called]), 58, "Investment Currency", "Periodic"),
+				    ("% Called", NAMEOF('Investment Metrics'[% Called]), 59, "Reporting Currency", "Periodic"),
+				    ("Outstanding Commitment (Local)", NAMEOF('Investment Metrics'[Outstanding Commitment (Local)]), 58, "Investment Currency", "Periodic"),
+				    ("Outstanding Commitment", NAMEOF('Investment Metrics'[Outstanding Commitment]), 59, "Reporting Currency", "Periodic")
+				}
+
+	annotation PBI_Id = 98364138a5014135baa0c6cca796fc40
+

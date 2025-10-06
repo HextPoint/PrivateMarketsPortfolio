@@ -1,0 +1,793 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.2.0/schema.json",
+  "name": "f230d8d07d0e52a644b4",
+  "position": {
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "height": 320.34827507656485,
+    "width": 1220,
+    "tabOrder": 2000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Portfolios"
+                    }
+                  },
+                  "Property": "Portfolio"
+                }
+              },
+              "queryRef": "Portfolios.Portfolio",
+              "nativeQueryRef": "Portfolio",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Currencies"
+                    }
+                  },
+                  "Property": "Investment CCY"
+                }
+              },
+              "queryRef": "Investment Currencies.Investment CCY",
+              "nativeQueryRef": "Investment CCY",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Strategies"
+                    }
+                  },
+                  "Property": "Strategy Group"
+                }
+              },
+              "queryRef": "Strategies.Strategy Group",
+              "nativeQueryRef": "Strategy Group",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investments"
+                    }
+                  },
+                  "Property": "Vintage"
+                }
+              },
+              "queryRef": "Investments.Vintage",
+              "nativeQueryRef": "Vintage",
+              "active": false
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investments"
+                    }
+                  },
+                  "Property": "Investment (legal name)"
+                }
+              },
+              "queryRef": "Investments.Investment (legal name)",
+              "nativeQueryRef": "Investment (legal name)",
+              "active": false
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "First Commitment Date"
+                }
+              },
+              "queryRef": "Investment Metrics.First Commitment Date",
+              "nativeQueryRef": "First Commitment Date"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Valuation"
+                }
+              },
+              "queryRef": "Investment Metrics.Valuation",
+              "nativeQueryRef": "Valuation"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Commitment"
+                }
+              },
+              "queryRef": "Investment Metrics.Commitment",
+              "nativeQueryRef": "Commitment"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Net Called"
+                }
+              },
+              "queryRef": "Investment Metrics.Net Called",
+              "nativeQueryRef": "Net Called"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "% Called"
+                }
+              },
+              "queryRef": "Investment Metrics.% Called",
+              "nativeQueryRef": "% Called"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Outstanding Commitment"
+                }
+              },
+              "queryRef": "Investment Metrics.Outstanding Commitment",
+              "nativeQueryRef": "Outstanding Commitment"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Valuation (Local)"
+                }
+              },
+              "queryRef": "Investment Metrics.Valuation (Local)",
+              "nativeQueryRef": "Valuation (Local)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Commitment (Local)"
+                }
+              },
+              "queryRef": "Investment Metrics.Commitment (Local)",
+              "nativeQueryRef": "Commitment (Local)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Net Called (Local)"
+                }
+              },
+              "queryRef": "Investment Metrics.Net Called (Local)",
+              "nativeQueryRef": "Net Called (Local)"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Metrics"
+                    }
+                  },
+                  "Property": "Outstanding Commitment (Local)"
+                }
+              },
+              "queryRef": "Investment Metrics.Outstanding Commitment (Local)",
+              "nativeQueryRef": "Outstanding Commitment (Local)"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Portfolios"
+                  }
+                },
+                "Property": "Portfolio"
+              }
+            },
+            "direction": "Descending"
+          },
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Investment Currencies"
+                  }
+                },
+                "Property": "Investment CCY"
+              }
+            },
+            "direction": "Descending"
+          },
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "Strategies"
+                  }
+                },
+                "Property": "Strategy Group"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "expansionStates": [
+      {
+        "roles": [
+          "Rows"
+        ],
+        "levels": [
+          {
+            "queryRefs": [
+              "Portfolios.Portfolio"
+            ],
+            "identityKeys": [
+              {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Portfolios"
+                    }
+                  },
+                  "Property": "Portfolio"
+                }
+              }
+            ],
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "Investment Currencies.Investment CCY"
+            ],
+            "identityKeys": [
+              {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investment Currencies"
+                    }
+                  },
+                  "Property": "Investment CCY"
+                }
+              }
+            ],
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "Strategies.Strategy Group"
+            ],
+            "isCollapsed": true,
+            "identityKeys": [
+              {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Strategies"
+                    }
+                  },
+                  "Property": "Strategy Group"
+                }
+              }
+            ],
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "Investments.Vintage"
+            ],
+            "isCollapsed": true,
+            "identityKeys": [
+              {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Investments"
+                    }
+                  },
+                  "Property": "Vintage"
+                }
+              }
+            ],
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "Investments.Investment (legal name)"
+            ],
+            "isCollapsed": true,
+            "isPinned": true
+          }
+        ],
+        "root": {}
+      }
+    ],
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "layout": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Compact'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "subTotals": [
+        {
+          "properties": {
+            "perRowLevel": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "columnWidth": [
+        {
+          "properties": {},
+          "selector": {
+            "metadata": "Portfolios.Portfolio"
+          }
+        },
+        {
+          "properties": {},
+          "selector": {
+            "metadata": "Investment Metrics.Valuation (Local)"
+          }
+        },
+        {
+          "properties": {},
+          "selector": {
+            "metadata": "Investment Metrics.Commitment (Local)"
+          }
+        },
+        {
+          "properties": {},
+          "selector": {
+            "metadata": "Investment Metrics.Net Called (Local)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "133.39244053820082D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Investment Metrics.Outstanding Commitment (Local)"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "98.67802491470873D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Investment Metrics.Outstanding Commitment"
+          }
+        },
+        {
+          "properties": {
+            "value": {
+              "expr": {
+                "Literal": {
+                  "Value": "94.25707776215053D"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "Investment Metrics.Valuation"
+          }
+        },
+        {
+          "properties": {},
+          "selector": {
+            "metadata": "Investment Metrics.Commitment"
+          }
+        },
+        {
+          "properties": {},
+          "selector": {
+            "metadata": "Investment Metrics.% Called"
+          }
+        },
+        {
+          "properties": {},
+          "selector": {
+            "metadata": "Investment Metrics.Net Called"
+          }
+        }
+      ],
+      "columnHeaders": [
+        {
+          "properties": {
+            "wordWrap": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "autoSizeColumnWidth": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "rowHeaders": [
+        {
+          "properties": {
+            "steppedLayoutIndentation": {
+              "expr": {
+                "Literal": {
+                  "Value": "8D"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "border": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "radius": {
+              "expr": {
+                "Literal": {
+                  "Value": "5D"
+                }
+              }
+            },
+            "color": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 0,
+                      "Percent": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualTooltip": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "section": {
+              "expr": {
+                "Literal": {
+                  "Value": "'3a902d61c9a6027ad848'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "parentGroupName": "bd83f5a005e499a28052",
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "325906ca08c212b0c943",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Portfolios"
+              }
+            },
+            "Property": "Portfolio"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "969093cde66a7d3aa536",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Investment Currencies"
+              }
+            },
+            "Property": "Investment CCY"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "c3d57101d943a556ee81",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Strategies"
+              }
+            },
+            "Property": "Strategy Group"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "dad79c550d179e806c77",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Investments"
+              }
+            },
+            "Property": "Vintage"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "1a0d1fe9b8eb00868406",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Investments"
+              }
+            },
+            "Property": "Investment (legal name)"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "b35cfc001706dcc08e02",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Investment Metrics"
+              }
+            },
+            "Property": "First Commitment Date"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "b23edf7400205e7c16ce",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Investment Metrics"
+              }
+            },
+            "Property": "Valuation"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "f2e5313faed4c96aa756",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Investment Metrics"
+              }
+            },
+            "Property": "Commitment"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "31eb1482991a53933c1c",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Investment Metrics"
+              }
+            },
+            "Property": "Net Called"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "ae7719c7733a02c051a5",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Investment Metrics"
+              }
+            },
+            "Property": "% Called"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "d271f0336abdce7c0a08",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Investment Metrics"
+              }
+            },
+            "Property": "Outstanding Commitment"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "31a39b5a61ba9e35e020",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Investment Metrics"
+              }
+            },
+            "Property": "Valuation (Local)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "0b7b3f96873e553e1c8b",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Investment Metrics"
+              }
+            },
+            "Property": "Commitment (Local)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "61ceef26cc8c3dae01ab",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Investment Metrics"
+              }
+            },
+            "Property": "Net Called (Local)"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "42fa3f60283a416c7e0e",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Investment Metrics"
+              }
+            },
+            "Property": "Outstanding Commitment (Local)"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

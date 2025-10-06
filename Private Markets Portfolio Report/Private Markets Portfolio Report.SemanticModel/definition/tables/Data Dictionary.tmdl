@@ -1,0 +1,78 @@
+table 'Data Dictionary'
+	lineageTag: 15a98da6-9e12-4ccd-806d-d0863c721e3f
+
+	column Type
+		lineageTag: 8bcc8dd4-4eb2-4b6c-8cb2-5708fae242c1
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Type]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Name
+		lineageTag: b5f96c48-5c39-4f25-8994-e19ac6d9f697
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Name]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Description
+		lineageTag: 005017cd-efc2-4fa5-a926-d053dc9d704e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Description]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Location
+		lineageTag: 512daddb-2781-4d3f-857e-85757a2726b0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Location]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Expression
+		lineageTag: 2a29f39a-8c1d-4a2c-9760-5feb0df13040
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Expression]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Data Dictionary' = calculated
+		mode: import
+		source =
+				
+				
+				VAR _columns = SELECTCOLUMNS(
+				    FILTER(
+				        INFO.VIEW.COLUMNS(),
+				        [Table] <> "Data Dictionary" && NOT([IsHidden]) && [Table] <> "Metric Selection"
+				    ),
+				    "Type", "Column",
+				    "Name", [Name],
+				    "Description", [Description],
+				    "Location", [Table],
+				    "Expression", [Expression]
+				)
+				
+				VAR _measures = SELECTCOLUMNS(
+				    FILTER(
+				        INFO.VIEW.MEASURES(),
+				        [Table] <> "Data Dictionary" && NOT([IsHidden]) && [Table] <> "Metric Selection"
+				    ),
+				    "Type", "Metric",
+				    "Name", [Name],
+				    "Description", [Description],
+				    "Location", [Table],
+				    "Expression", [Expression]
+				)
+				
+				VAR Result = UNION(_columns,_measures)
+				
+				RETURN Result
+
+	annotation PBI_Id = d9517a1f95c941fdbadacd051b2cba91
+

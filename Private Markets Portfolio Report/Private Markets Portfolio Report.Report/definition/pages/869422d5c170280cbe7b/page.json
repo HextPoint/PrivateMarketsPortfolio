@@ -1,0 +1,141 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "869422d5c170280cbe7b",
+  "displayName": "Investment Transactions",
+  "displayOption": "FitToPage",
+  "height": 720,
+  "width": 1280,
+  "pageBinding": {
+    "name": "7faeafc1714111a60c5c",
+    "type": "Default",
+    "parameters": []
+  },
+  "objects": {
+    "background": [
+      {
+        "properties": {
+          "color": {
+            "solid": {
+              "color": {
+                "expr": {
+                  "Literal": {
+                    "Value": "'#F8F8FA'"
+                  }
+                }
+              }
+            }
+          },
+          "transparency": {
+            "expr": {
+              "Literal": {
+                "Value": "0D"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "visualInteractions": [
+    {
+      "source": "1e1a7fcc2628a08c308b",
+      "target": "18229c82420bdb3b90a9",
+      "type": "NoFilter"
+    },
+    {
+      "source": "1e1a7fcc2628a08c308b",
+      "target": "6ced4466067d7d17d042",
+      "type": "NoFilter"
+    },
+    {
+      "source": "1e1a7fcc2628a08c308b",
+      "target": "97beb0241d3d26dd4e0a",
+      "type": "NoFilter"
+    },
+    {
+      "source": "1e1a7fcc2628a08c308b",
+      "target": "5460a910089094541850",
+      "type": "NoFilter"
+    },
+    {
+      "source": "b309d2bc0400cb57cd29",
+      "target": "97beb0241d3d26dd4e0a",
+      "type": "NoFilter"
+    },
+    {
+      "source": "b309d2bc0400cb57cd29",
+      "target": "7080ffd4306cd73340c8",
+      "type": "NoFilter"
+    },
+    {
+      "source": "b309d2bc0400cb57cd29",
+      "target": "5460a910089094541850",
+      "type": "NoFilter"
+    },
+    {
+      "source": "7080ffd4306cd73340c8",
+      "target": "b309d2bc0400cb57cd29",
+      "type": "NoFilter"
+    },
+    {
+      "source": "7080ffd4306cd73340c8",
+      "target": "97beb0241d3d26dd4e0a",
+      "type": "NoFilter"
+    },
+    {
+      "source": "7080ffd4306cd73340c8",
+      "target": "5460a910089094541850",
+      "type": "NoFilter"
+    },
+    {
+      "source": "7080ffd4306cd73340c8",
+      "target": "6ced4466067d7d17d042",
+      "type": "NoFilter"
+    },
+    {
+      "source": "b309d2bc0400cb57cd29",
+      "target": "6ced4466067d7d17d042",
+      "type": "NoFilter"
+    },
+    {
+      "source": "97beb0241d3d26dd4e0a",
+      "target": "6ced4466067d7d17d042",
+      "type": "NoFilter"
+    },
+    {
+      "source": "97beb0241d3d26dd4e0a",
+      "target": "18229c82420bdb3b90a9",
+      "type": "NoFilter"
+    },
+    {
+      "source": "97beb0241d3d26dd4e0a",
+      "target": "5460a910089094541850",
+      "type": "NoFilter"
+    },
+    {
+      "source": "97beb0241d3d26dd4e0a",
+      "target": "7080ffd4306cd73340c8",
+      "type": "NoFilter"
+    },
+    {
+      "source": "97beb0241d3d26dd4e0a",
+      "target": "b309d2bc0400cb57cd29",
+      "type": "NoFilter"
+    },
+    {
+      "source": "b309d2bc0400cb57cd29",
+      "target": "18229c82420bdb3b90a9",
+      "type": "NoFilter"
+    },
+    {
+      "source": "7080ffd4306cd73340c8",
+      "target": "18229c82420bdb3b90a9",
+      "type": "NoFilter"
+    },
+    {
+      "source": "1e1a7fcc2628a08c308b",
+      "target": "f986ac56090033a940a9",
+      "type": "NoFilter"
+    }
+  ]
+}

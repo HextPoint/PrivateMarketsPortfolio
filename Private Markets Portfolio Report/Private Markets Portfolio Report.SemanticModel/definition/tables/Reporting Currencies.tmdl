@@ -1,0 +1,106 @@
+table 'Reporting Currencies'
+	lineageTag: 60f2fb79-cc6b-4f3d-b9a9-1753ab2387d8
+
+	/// The currently selected reporting currency.
+	measure 'Reporting Currency' = SELECTEDVALUE('Reporting Currencies'[Reporting Currency Name])
+		lineageTag: fe65eb49-e130-48df-983d-272556b900e6
+
+	column CurrencyKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 92bff5ed-67fd-4345-b661-b4aeac484541
+		summarizeBy: none
+		sourceColumn: CurrencyKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The reporting currency's name.
+	column 'Reporting Currency Name'
+		dataType: string
+		lineageTag: be1dae1b-660b-4c7d-85ee-e2122f165d70
+		summarizeBy: none
+		sourceColumn: Reporting Currency Name
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The reporting currency's three letter ISO currency code.
+	column 'Reporting CCY'
+		dataType: string
+		lineageTag: c393a7e1-239b-47f4-b8e5-637245a8b4dc
+		summarizeBy: none
+		sourceColumn: Reporting CCY
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Currency Symbol'
+		dataType: string
+		isHidden
+		lineageTag: e5205451-4794-4612-8964-08148d6b9dfd
+		summarizeBy: none
+		sourceColumn: Currency Symbol
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Indicates where the currency has been enabled as a reporting currency.
+	column 'Is Reporting Currency'
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 7ae19ae3-cb12-47ab-a761-470936a6c690
+		summarizeBy: none
+		sourceColumn: Is Reporting Currency
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The format string used for all investment metrics in the reporting currency.
+	column 'Currency format string'
+		dataType: string
+		lineageTag: d8416de8-95b7-4507-b65a-26ac6b670ba9
+		summarizeBy: none
+		sourceColumn: Currency format string
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsBaseCurrency
+		dataType: boolean
+		isHidden
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: f1ef487f-082b-4b54-b1ea-158cf9f5c0d8
+		summarizeBy: none
+		sourceColumn: IsBaseCurrency
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Transaction format string'
+		dataType: string
+		isHidden
+		lineageTag: 928c695a-60ab-4622-ae6d-2d179d085bda
+		summarizeBy: none
+		sourceColumn: Transaction format string
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Reporting Currencies' = m
+		mode: import
+		queryGroup: 'Model tables'
+		source =
+				let
+				    Unfiltered_Currencies = Currencies,
+				    #"Renamed Columns" = Table.RenameColumns(Unfiltered_Currencies,{{"CCY", "Reporting CCY"}, {"Currency Name", "Reporting Currency Name"}, {"Reporting Currency", "Is Reporting Currency"}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

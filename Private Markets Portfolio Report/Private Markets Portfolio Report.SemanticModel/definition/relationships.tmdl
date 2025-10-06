@@ -1,0 +1,91 @@
+relationship AutoDetected_2c4d4a1e-4f0f-4ce3-8afd-9385668287c3
+	fromColumn: 'Investment Metrics'.PortfolioKey
+	toColumn: Portfolios.PortfolioKey
+
+relationship 7f2e5c34-3a62-4a5c-9b4f-5de2417ea26c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Valuations.Date
+	toColumn: LocalDateTable_9eedec17-a5d9-487f-9ce5-f414e912a8ef.Date
+
+relationship 7b96690f-ec19-4e52-9b89-70977a4ff08a
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'FX Rates'.Date
+	toColumn: LocalDateTable_2210ebf9-e8c9-44f0-922f-913288a91a58.Date
+
+relationship AutoDetected_9f772e1d-6302-447e-84f8-cfb64ede0c50
+	fromColumn: 'Investment Metrics'.ManagerKey
+	toColumn: Managers.ManagerKey
+
+relationship AutoDetected_1ed29f88-3e20-4052-88c8-d3ceda63ebf6
+	fromColumn: 'Investment Metrics'.RegionKey
+	toColumn: 'Regional Focus'.RegionKey
+
+relationship AutoDetected_1252cdd7-ac8f-4c66-8c77-fd1841d7a72d
+	fromColumn: 'Investment Metrics'.InvestmentKey
+	toColumn: Investments.InvestmentKey
+
+relationship dd8fe431-a2ab-0341-7b49-9d76131efdc9
+	fromColumn: 'Investment Metrics'.Date
+	toColumn: Dates.Date
+
+relationship AutoDetected_60e1e0b0-e784-4899-9208-7f0c7a5a89ff
+	fromColumn: 'Investment Metrics'.AssetClassKey
+	toColumn: 'Asset Classes'.AssetClassKey
+
+relationship AutoDetected_d4910591-e574-41ee-84e2-1af257f57868
+	fromColumn: 'Investment Metrics'.StrategyKey
+	toColumn: Strategies.StrategyKey
+
+relationship AutoDetected_23190072-45ed-401c-a00e-462b9dd5d9eb
+	fromColumn: 'Investment Metrics'.CurrencyKey
+	toColumn: 'Reporting Currencies'.CurrencyKey
+
+relationship AutoDetected_f0679459-ba7e-4ee3-964c-25caaf0f9154
+	fromColumn: 'FX Rates'.CCY
+	toColumn: Currencies.CCY
+
+relationship 76685394-8d31-25ec-720f-f09370d7677a
+	fromColumn: 'Investment Metrics'.InvestmentCurrencyKey
+	toColumn: 'Investment Currencies'.CurrencyKey
+
+relationship 36c7b9fd-0652-2441-2890-0dfbf09424a0
+	fromColumn: Transactions.TransactionTypeKey
+	toColumn: 'Transaction Types'.TransactionTypeKey
+
+relationship a7c93a32-5aa5-77f9-864d-1e1d402696b8
+	fromColumn: Transactions.PortfolioKey
+	toColumn: Portfolios.PortfolioKey
+
+relationship 80248bb8-4354-d28a-5fea-e538f7fa8a3a
+	fromColumn: Transactions.InvestmentKey
+	toColumn: Investments.InvestmentKey
+
+relationship 25e092d6-8fc2-9f04-fd36-918ddeeddb02
+	fromColumn: Transactions.Date
+	toColumn: Dates.Date
+
+relationship AutoDetected_ee97a2fd-fcd9-443a-b081-e7f07a466b42
+	fromColumn: Transactions.ManagerKey
+	toColumn: Managers.ManagerKey
+
+relationship AutoDetected_5ab78666-b237-4106-8015-148f6ede68bb
+	fromColumn: Transactions.CurrencyKey
+	toColumn: 'Investment Currencies'.CurrencyKey
+
+relationship AutoDetected_c316c56c-068e-4537-a662-1663cf4f34dc
+	fromColumn: Transactions.StrategyKey
+	toColumn: Strategies.StrategyKey
+
+relationship AutoDetected_d7de46bc-7147-402f-b81d-0c0677bf1394
+	fromColumn: Transactions.RegionKey
+	toColumn: 'Regional Focus'.RegionKey
+
+relationship AutoDetected_d23fbecd-3fb9-4db9-8f8e-b46a2d89ee95
+	fromColumn: Transactions.AssetClassKey
+	toColumn: 'Asset Classes'.AssetClassKey
+
+relationship 11dd54ef-9586-4ebc-a506-bd4a7bc3fd6e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Commitments.Date
+	toColumn: LocalDateTable_b61fe6fd-c5e8-42bc-9a5e-3ae3be63d94b.Date
+

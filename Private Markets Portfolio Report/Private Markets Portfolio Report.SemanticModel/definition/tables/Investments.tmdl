@@ -1,0 +1,142 @@
+table Investments
+	lineageTag: 0290f675-5b8b-4bf5-b059-6dc5a2fa4047
+
+	/// The currently selected investment.
+	measure 'Selected Investment' = SELECTEDVALUE('Investments'[Investment (legal name)])
+		lineageTag: 3797ffcf-c552-4b6a-b8c4-805b10627f5b
+
+	/// The investment's short name.
+	column Investment
+		dataType: string
+		lineageTag: 0880e5d9-ec71-47e5-a60e-1441dc24c387
+		summarizeBy: none
+		sourceColumn: Investment
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The investment's full legal name.
+	column 'Investment (legal name)'
+		dataType: string
+		lineageTag: 20ba67c6-82f0-46bd-b55f-f9bdb3ea1f6e
+		summarizeBy: none
+		sourceColumn: Investment (legal name)
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The investment series indicates the investment fund series which can be used across multiple investments.
+	column 'Investment Series'
+		dataType: string
+		lineageTag: ccc46fd5-02e2-475c-86e2-8a8793085cbb
+		summarizeBy: none
+		sourceColumn: Investment Series
+
+		annotation SummarizationSetBy = Automatic
+
+	column InvestmentKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 90c79b99-d4d9-459c-b236-9fcd36b1c997
+		summarizeBy: none
+		sourceColumn: InvestmentKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ManagerKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 24538d3a-cd8a-4b1a-9b55-82536c528546
+		summarizeBy: none
+		sourceColumn: ManagerKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column CurrencyKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 294d7f86-233b-4e1c-8eeb-fb0aea70be71
+		summarizeBy: count
+		sourceColumn: CurrencyKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column StrategyKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: ce4f3e76-5b8d-40af-9f2e-33b6b2d4ce80
+		summarizeBy: none
+		sourceColumn: StrategyKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = User
+
+	column RegionKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 193c9fe7-2db9-4123-a21d-c19e2f1d5e88
+		summarizeBy: count
+		sourceColumn: RegionKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column AssetClassKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: e228ff45-59be-418b-be1a-cf532d2c5892
+		summarizeBy: count
+		sourceColumn: AssetClassKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The investment vintage
+	column Vintage
+		dataType: int64
+		formatString: 0
+		lineageTag: ed6f37cd-df5b-4fd5-88cd-a5ef795478df
+		summarizeBy: sum
+		sourceColumn: Vintage
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Investments = m
+		mode: import
+		queryGroup: 'Model tables'
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents(ExcelFileURL), null, true),
+				    Investments_Table = Source{[Item="Investments",Kind="Table"]}[Data],
+				    ChangedTypes = Table.TransformColumnTypes(Investments_Table,{{"Investment", type text}, {"Investment (legal name)", type text}, {"Investment Series", type text}, {"CCY", type text}, {"Manager", type text}, {"Strategy", type text}, {"Regional Focus", type text}, {"Vintage", Int64.Type}}),
+				    AddedInvestmentKey = Table.AddIndexColumn(ChangedTypes, "InvestmentKey", 1, 1, Int64.Type),
+				    ReorderedColumns = Table.ReorderColumns(AddedInvestmentKey,{"InvestmentKey", "Investment", "Investment (legal name)", "Investment Series", "CCY", "Manager", "Strategy", "Regional Focus", "Vintage"}),
+				    JoinManagers = Table.NestedJoin(ReorderedColumns, {"Manager"}, Managers, {"Manager"}, "Managers", JoinKind.LeftOuter),
+				    ExpandedManagers = Table.ExpandTableColumn(JoinManagers, "Managers", {"ManagerKey"}, {"ManagerKey"}),
+				    JoinCurrencies = Table.NestedJoin(ExpandedManagers, {"CCY"}, Currencies, {"CCY"}, "Currencies", JoinKind.LeftOuter),
+				    ExpandedCurrencies = Table.ExpandTableColumn(JoinCurrencies, "Currencies", {"CurrencyKey"}, {"CurrencyKey"}),
+				    JoinStrategies = Table.NestedJoin(ExpandedCurrencies, {"Strategy"}, Strategies, {"Strategy"}, "Strategies", JoinKind.LeftOuter),
+				    ExpandedStrategies = Table.ExpandTableColumn(JoinStrategies, "Strategies", {"StrategyKey","AssetClassKey"}, {"StrategyKey","AssetClassKey"}),
+				    JoinRegionalFocus = Table.NestedJoin(ExpandedStrategies, {"Regional Focus"}, #"Regional Focus", {"Region"}, "Region", JoinKind.LeftOuter),
+				    ExpandedRegion = Table.ExpandTableColumn(JoinRegionalFocus, "Region", {"RegionKey"}, {"RegionKey"}),
+				    #"Removed Other Columns" = Table.SelectColumns(ExpandedRegion,{"InvestmentKey", "Investment", "Investment (legal name)", "Investment Series", "Vintage", "ManagerKey", "CurrencyKey", "StrategyKey", "RegionKey","AssetClassKey"})
+				in
+				    #"Removed Other Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

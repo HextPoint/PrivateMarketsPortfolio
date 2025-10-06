@@ -1,0 +1,65 @@
+table Strategies
+	lineageTag: 18e5ce2f-9387-4b87-80a5-d1afe23a8eaa
+
+	/// The investment's strategy.
+	column Strategy
+		dataType: string
+		lineageTag: e8db4ac3-9896-4670-9276-c3c9fd428936
+		summarizeBy: none
+		sourceColumn: Strategy
+
+		annotation SummarizationSetBy = Automatic
+
+	/// The investment's strategy group.
+	column 'Strategy Group'
+		dataType: string
+		lineageTag: 605e10a9-56e9-4c0e-9185-71020aaea40e
+		summarizeBy: none
+		sourceColumn: Strategy Group
+
+		annotation SummarizationSetBy = Automatic
+
+	column StrategyKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: d24f52c0-2ce0-4624-921d-3e5f9cef249d
+		summarizeBy: none
+		sourceColumn: StrategyKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column AssetClassKey
+		dataType: int64
+		isHidden
+		formatString: 0
+		lineageTag: 157e860e-7767-42ed-a13c-4be9e9e6a0f1
+		summarizeBy: count
+		sourceColumn: AssetClassKey
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Strategies = m
+		mode: import
+		queryGroup: 'Model tables'
+		source =
+				let
+				    Source = Excel.Workbook(Web.Contents(ExcelFileURL), null, true),
+				    Strategies_Table = Source{[Item="Strategies",Kind="Table"]}[Data],
+				    #"Changed Type" = Table.TransformColumnTypes(Strategies_Table,{{"Strategy", type text}, {"Strategy Group", type text}, {"Asset Class", type text}}),
+				    AddedStrategyKey = Table.AddIndexColumn(#"Changed Type", "StrategyKey", 1, 1, Int64.Type),
+				    #"Merged Queries" = Table.NestedJoin(AddedStrategyKey, {"Asset Class"}, #"Asset Classes", {"Asset Class"}, "Asset Classes", JoinKind.LeftOuter),
+				    #"Expanded Asset Classes" = Table.ExpandTableColumn(#"Merged Queries", "Asset Classes", {"AssetClassKey"}, {"AssetClassKey"}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Expanded Asset Classes",{"Asset Class"}),
+				    #"Reordered Columns" = Table.ReorderColumns(#"Removed Columns",{"StrategyKey", "Strategy", "Strategy Group"})
+				in
+				    #"Reordered Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

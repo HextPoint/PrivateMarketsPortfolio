@@ -1,0 +1,189 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.0.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY24SU10",
+      "reportVersionAtImport": {
+        "visual": "1.8.95",
+        "report": "2.0.95",
+        "page": "1.3.95"
+      },
+      "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "AccessibleTidal",
+      "reportVersionAtImport": {
+        "visual": "2.1.0",
+        "report": "2.1.0",
+        "page": "2.0.0"
+      },
+      "type": "SharedResources"
+    }
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "30459344bc78761080a0",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "Dates"
+              }
+            },
+            "Property": "Date"
+          }
+        },
+        "type": "Categorical",
+        "howCreated": "User"
+      }
+    ]
+  },
+  "objects": {
+    "section": [
+      {
+        "properties": {
+          "verticalAlignment": {
+            "expr": {
+              "Literal": {
+                "Value": "'Top'"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "outspacePane": [
+      {
+        "properties": {
+          "expanded": {
+            "expr": {
+              "Literal": {
+                "Value": "false"
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "publicCustomVisuals": [
+    "RadarChart1446119667547",
+    "htmlContent443BE3AD55E043BF878BED274D3A6865"
+  ],
+  "resourcePackages": [
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "CY24SU10",
+          "path": "BaseThemes/CY24SU10.json",
+          "type": "BaseTheme"
+        },
+        {
+          "name": "AccessibleTidal",
+          "path": "BuiltInThemes/AccessibleTidal.json",
+          "type": "CustomTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "circle-info-solid-full_(1)03693543651967102.svg",
+          "path": "circle-info-solid-full_(1)03693543651967102.svg",
+          "type": "Image"
+        },
+        {
+          "name": "sliders-solid-full_(1)8999476091816501.svg",
+          "path": "sliders-solid-full_(1)8999476091816501.svg",
+          "type": "Image"
+        },
+        {
+          "name": "Hext_Point_-_logo_v1_inverted_9434171640692787.svg",
+          "path": "Hext_Point_-_logo_v1_inverted_9434171640692787.svg",
+          "type": "Image"
+        },
+        {
+          "name": "arrow-left-solid-full33311543193826265.svg",
+          "path": "arrow-left-solid-full33311543193826265.svg",
+          "type": "Image"
+        },
+        {
+          "name": "sliders-solid-full_white6441725106030777.svg",
+          "path": "sliders-solid-full_white6441725106030777.svg",
+          "type": "Image"
+        },
+        {
+          "name": "arrow-left-solid-full_white7733895312252825.svg",
+          "path": "arrow-left-solid-full_white7733895312252825.svg",
+          "type": "Image"
+        },
+        {
+          "name": "gears-solid-full8013084367581601.svg",
+          "path": "gears-solid-full8013084367581601.svg",
+          "type": "Image"
+        },
+        {
+          "name": "xmark-solid-full019916523080833692.svg",
+          "path": "xmark-solid-full019916523080833692.svg",
+          "type": "Image"
+        },
+        {
+          "name": "Report_Tooltip41532727202903774.png",
+          "path": "Report_Tooltip41532727202903774.png",
+          "type": "Image"
+        },
+        {
+          "name": "Header_Icons041215509806634465.png",
+          "path": "Header_Icons041215509806634465.png",
+          "type": "Image"
+        },
+        {
+          "name": "Commitment_Tooltip4552317023207493.png",
+          "path": "Commitment_Tooltip4552317023207493.png",
+          "type": "Image"
+        },
+        {
+          "name": "IRR_chart_filter_cross-highlig10674077938565785.png",
+          "path": "IRR_chart_filter_cross-highlig10674077938565785.png",
+          "type": "Image"
+        },
+        {
+          "name": "perf_row_selected4655840333356157.png",
+          "path": "perf_row_selected4655840333356157.png",
+          "type": "Image"
+        },
+        {
+          "name": "vintage_row_selected15093194367512264.png",
+          "path": "vintage_row_selected15093194367512264.png",
+          "type": "Image"
+        },
+        {
+          "name": "commitment_selected4723171966288152.png",
+          "path": "commitment_selected4723171966288152.png",
+          "type": "Image"
+        },
+        {
+          "name": "Header_Icons_Short2010542490527606.png",
+          "path": "Header_Icons_Short2010542490527606.png",
+          "type": "Image"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": "AllowSummarized",
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "allowInlineExploration": true,
+    "useEnhancedTooltips": true,
+    "useDefaultAggregateDisplayName": true,
+    "customMemoryLimit": "1048576",
+    "customTimeoutLimit": "225"
+  }
+}

@@ -3,9 +3,9 @@
   "position": {
     "x": 50,
     "y": 0,
-    "z": 10000,
+    "z": 1000,
     "height": 50,
     "width": 225,
-    "tabOrder": 19000
+    "tabOrder": 0
   }
 }

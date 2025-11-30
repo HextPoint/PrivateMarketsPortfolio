@@ -120,7 +120,7 @@ table 'Investment Metrics'
 						)
 				
 			VAR ClosingValuation = ROW (
-			    "Date", MaxDateInFilter,
+			    "Date", MaxDateInFilter - 1,
 			    "CashFlowAmount", [Valuation]
 			)
 					
@@ -232,7 +232,7 @@ table 'Investment Metrics'
 						)
 				
 			VAR ClosingValuation = ROW (
-			    "Date", MaxDateInFilter,
+			    "Date", MaxDateInFilter - 1,
 			    "CashFlowAmount", [Valuation (Local)]
 			)
 					
